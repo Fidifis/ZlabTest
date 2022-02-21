@@ -10,9 +10,12 @@ int compile(const string &sourceCodePath, const Config *conf)
 
     cout << "Compiling source code from: \n"
          << sourceCodePath << endl;
-    system(("g++ " + conf->compileArgs + " -o " + conf->pathToPlayground + conf->outputBinaryFileName + " " +
-            sourceCodePath + " 2> " + conf->pathToPlayground + conf->compileStdErrFileName)
-               .c_str());
+
+    const string cmd = "g++ " + conf->compileArgs +
+            " -o " + conf->pathToPlayground + conf->outputBinaryFileName +
+            " " + sourceCodePath +
+            " 2> " + conf->pathToPlayground + conf->compileStdErrFileName;
+    system(cmd.c_str());
 
     if (filesystem::exists(conf->pathToPlayground + conf->outputBinaryFileName))
     {
@@ -41,6 +44,27 @@ int compile(const string &sourceCodePath, const Config *conf)
     else
     {
         cout << "Compilation failed." << endl;
+    }
+
+    return 0;
+}
+
+int runProgram(const string &inputDataPath, const Config *conf)
+{
+    if (!filesystem::exists(inputDataPath))
+        return 1;
+
+    for (auto &file : filesystem::directory_iterator(inputDataPath)) {
+        if (!file.exists())
+            continue;
+
+        //( time timeout x cat x | x > x ) > x
+        const string cmd = "( time timeout " + conf->defaultTimeout +
+            " cat " + file.path().string() +
+            " | " + conf->pathToPlayground + conf->outputBinaryFileName +
+            " > " + conf->outputDataPath + file.path().filename().string() +
+            "_out ) 2> " + conf->outputDataPath + file.path().filename().string() + "_out_time";
+        system(cmd.c_str());
     }
 
     return 0;

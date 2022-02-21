@@ -30,5 +30,11 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    string tmp_input = "/home/zlabtest/playground/input/";
+    if (runProgram(tmp_input, globalConf))
+    {
+        return 1;
+    }
+
     //clearFiles(compParams);
 }
