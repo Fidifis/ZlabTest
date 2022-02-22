@@ -11,15 +11,13 @@ PCH_FILE := $(OBJ_DIR)/$(PCH).gch
 zlabtest: $(OBJ_FILES)
 	g++ $(LDFLAGS) -o $@ $^
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp $(OBJ_DIR) $(PCH_FILE)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	g++ $(CPPFLAGS) -c -o $@ $<
 
-$(OBJ_DIR):
-	mkdir -p $@
-
-$(PCH_FILE): $(SRC_DIR)/$(PCH) $(OBJ_DIR)
-	g++ $(CPPFLAGS) -o $@ $<
+init:
+	mkdir -p $(OBJ_DIR)
+	g++ $(CPPFLAGS) -o $(PCH_FILE) $(SRC_DIR)/$(PCH)
 
 clean:
 	rm -r $(OBJ_DIR)
-	rm zlabtest config.json 2> /dev/null
+	rm zlabtest config.json 2> /dev/null || true
