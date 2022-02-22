@@ -58,8 +58,8 @@ int runProgram(const string &inputDataPath, const Config *conf)
         if (!file.exists())
             continue;
 
-        //( time timeout x cat x | x > x ) > x
-        const string cmd = "( time timeout " + conf->defaultTimeout +
+        //( time -f '%E' timeout x cat x | x > x ) > x
+        const string cmd = "( time -f '%E' timeout " + conf->defaultTimeout +
             " cat " + file.path().string() +
             " | " + conf->pathToPlayground + conf->outputBinaryFileName +
             " > " + conf->outputDataPath + file.path().filename().string() +
