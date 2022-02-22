@@ -32,7 +32,6 @@ void Config::toJSON(json &js)
         {"pathToPlayground", pathToPlayground},
         {"compile",
             {
-                {"compileArgs", compileArgs},
                 {"outputBinaryFileName", outputBinaryFileName},
                 {"compileStdErrFileName", compileStdErrFileName}
             }
@@ -40,7 +39,6 @@ void Config::toJSON(json &js)
         {"run",
             {
                 {"outputDataPath", outputDataPath},
-                {"defaultTimeout", defaultTimeout}
             }
         }
     };
@@ -50,9 +48,7 @@ void Config::parse(const json &js)
 {
     pathToPlayground = js["pathToPlayground"];
 
-    compileArgs = js["compile"]["compileArgs"];
     outputBinaryFileName = js["compile"]["outputBinaryFileName"];
     compileStdErrFileName = js["compile"]["compileStdErrFileName"];
     outputDataPath = js["run"]["outputDataPath"];
-    defaultTimeout = js["run"]["defaultTimeout"];
 }
