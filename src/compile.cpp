@@ -4,12 +4,11 @@ int compile(const string &sourceCodePath, const Config *conf)
 {
     if (sourceCodePath.empty())
     {
-        cerr << "Path is empty.";
+        cerr << "Path is empty. " << sourceCodePath << endl;
         return 1;
     }
 
-    cout << "Compiling source code from: \n"
-         << sourceCodePath << endl;
+    cout << "Compiling source code from: " << sourceCodePath << endl;
 
     const string cmd = "g++ " + conf->compileArgs +
             " -o " + conf->pathToPlayground + conf->outputBinaryFileName +
@@ -52,11 +51,18 @@ int compile(const string &sourceCodePath, const Config *conf)
 int runProgram(const string &inputDataPath, const Config *conf)
 {
     if (!filesystem::exists(inputDataPath))
+    {
+        cerr << "Path does not exists. " <<  inputDataPath << endl;
         return 1;
+    }
+
+    cout << "Executing program with inputs from: " << inputDataPath << endl;
 
     for (auto &file : filesystem::directory_iterator(inputDataPath)) {
         if (!file.exists())
             continue;
+
+        cout << "Test " << file.path().filename().string() << endl;
 
         //( time -f '%E' timeout x cat x | x > x ) > x
         const string cmd = "( time -f '%E' timeout " + conf->defaultTimeout +
