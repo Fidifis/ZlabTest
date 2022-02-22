@@ -2,7 +2,7 @@ SRC_DIR := src
 OBJ_DIR := obj
 PCH := headers.hpp
 LDFLAGS :=
-CPPFLAGS := -Wall -pedantic
+CPPFLAGS := -std=c++17 -Wall -Wextra -pedantic -Wno-unused-result -O2
 
 SRC_FILES := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ_FILES := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRC_FILES))
