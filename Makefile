@@ -6,7 +6,6 @@ CPPFLAGS := -Wall -pedantic
 
 SRC_FILES := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ_FILES := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRC_FILES))
-PCH_FILE := $(OBJ_DIR)/$(PCH).gch
 
 zlabtest: $(OBJ_FILES)
 	g++ $(LDFLAGS) -o $@ $^
@@ -16,8 +15,9 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 
 init:
 	mkdir -p $(OBJ_DIR)
-	g++ $(CPPFLAGS) -o $(PCH_FILE) $(SRC_DIR)/$(PCH)
+	g++ $(CPPFLAGS) $(SRC_DIR)/$(PCH)
 
 clean:
 	rm -r $(OBJ_DIR)
+	rm $(SRC_DIR)/*gch
 	rm zlabtest config.json 2> /dev/null || true
