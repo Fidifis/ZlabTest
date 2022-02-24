@@ -1,26 +1,35 @@
 #include "compile.hpp"
 
-int compile(const string &sourceCodePath, const Config *conf)
+int compile(const Task *task, const string &sourceCodeFile)
 {
-    if (sourceCodePath.empty())
+    if (sourceCodeFile.empty())
     {
-        cerr << "Path is empty. " << sourceCodePath << endl;
+        cerr << "Path is empty. " << sourceCodeFile << endl;
+        return 1;
+    }
+    if (filesystem::is_directory(sourceCodeFile))
+    {
+        cerr << "Given file is a directory. " << sourceCodeFile << endl;
         return 1;
     }
 
-    cout << "Compiling source code from: " << sourceCodePath << endl;
+    cout << "Compiling source code from: " << sourceCodeFile << endl;
 
-    const string cmd = "g++ " + conf->compileArgs +
-            " -o " + conf->pathToPlayground + conf->outputBinaryFileName +
-            " " + sourceCodePath +
-            " 2> " + conf->pathToPlayground + conf->compileStdErrFileName;
+    string binFile = task->config->pathToPlayground + task->config->outputBinaryFileName;
+    string errFile = task->config->pathToPlayground + task->config->compileStdErrFileName;
+
+    //g++ [args] -o [out.bin] [x.cpp] 2> [err]
+    const string cmd = "g++ " + task->compileArgs +
+            " -o " + binFile +
+            " " + sourceCodeFile +
+            " 2> " + errFile;
     system(cmd.c_str());
 
-    if (filesystem::exists(conf->pathToPlayground + conf->outputBinaryFileName))
+    if (filesystem::exists(binFile))
     {
-        if (filesystem::exists(conf->pathToPlayground + conf->compileStdErrFileName))
+        if (filesystem::exists(errFile))
         {
-            ifstream errfile(conf->pathToPlayground + conf->compileStdErrFileName);
+            ifstream errfile(errFile);
             string content;
             getline(errfile, content, '\0');
 
@@ -48,28 +57,28 @@ int compile(const string &sourceCodePath, const Config *conf)
     return 0;
 }
 
-int runProgram(const string &inputDataPath, const Config *conf)
+int runProgram(const Test *test)
 {
-    if (!filesystem::exists(inputDataPath))
+    if (!filesystem::exists(test->testsInputPath))
     {
-        cerr << "Path does not exists. " <<  inputDataPath << endl;
+        cerr << "Path does not exists. " <<  test->testsInputPath << endl;
         return 1;
     }
 
-    cout << "Executing program with inputs from: " << inputDataPath << endl;
+    cout << "Executing program with inputs from: " << test->testsInputPath << endl;
 
-    for (auto &file : filesystem::directory_iterator(inputDataPath)) {
-        if (!file.exists())
+    for (auto &file : filesystem::directory_iterator(test->testsInputPath)) {
+        if (!file.exists() || file.is_directory())
             continue;
 
         cout << "Test " << file.path().filename().string() << endl;
 
-        //( time -f '%E' timeout x cat x | x > x ) > x
-        const string cmd = "( time -f '%E' timeout " + conf->defaultTimeout +
+        //( time -f '%E' timeout [x] cat [file] | [bin] > [output] ) > [time]
+        const string cmd = "( time -f '%E' timeout " + test->task->maxTime +
             " cat " + file.path().string() +
-            " | " + conf->pathToPlayground + conf->outputBinaryFileName +
-            " > " + conf->outputDataPath + file.path().filename().string() +
-            "_out ) 2> " + conf->outputDataPath + file.path().filename().string() + "_out_time";
+            " | " + test->task->config->pathToPlayground + test->task->config->outputBinaryFileName +
+            " > " + test->task->config->outputDataPath + file.path().filename().string() +
+            "_out ) 2> " + test->task->config->outputDataPath + file.path().filename().string() + "_out_time";
         system(cmd.c_str());
     }
 

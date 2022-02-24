@@ -10,10 +10,11 @@ public:
     string taskName;
     string testsPath;
     string compileArgs;
-    float maxTime;
-    string sourceCodeFile;
+    string maxTime;
+    Config *config;
 
-    void load(const string &path, const char sourceCodeFile[]);
+public:
+    Task(const Config *config, const string &path);
 
-    void runTests(const Config *config);
+    void runTests(const char sourceCodeFile[]);
 };

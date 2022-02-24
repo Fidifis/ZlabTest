@@ -1,5 +1,6 @@
 #pragma once
 #include "headers.hpp"
+#include "task.hpp"
 
 class Test
 {
@@ -8,7 +9,13 @@ public:
     string testsInputPath;
     string overrideCompileArgs;
     string overrideMaxTime;
+    Task *task;
 
 public:
-    void load(const string &path);
+    Test(const Task *task, const string &path);
+
+    string getCompileArgs();
+    string getMaxTime();
+
+    void runTests();
 };

@@ -1,7 +1,8 @@
 #pragma once
 #include "headers.hpp"
-#include "config.hpp"
+#include "task.hpp"
+#include "test.hpp"
 
-int compile(const string &sourceCodePath, const Config *conf);
+int compile(const Task *task, const string &sourceCodeFile);
 
-int runProgram(const string &inputDataPath, const Config *conf);
+int runProgram(const Test *test);
