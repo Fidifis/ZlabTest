@@ -1,12 +1,12 @@
 #include "headers.hpp"
-#include "config.hpp"
+#include "task.hpp"
 #include "compile.hpp"
 
 const char CONFIG_FILE_NAME[] = "config.json";
 
-void clearFiles(const Config *params)
+void clearFiles(const Task *task)
 {
-    for (auto &file : filesystem::directory_iterator(params->pathToPlayground)) 
+    for (auto &file : filesystem::directory_iterator(task->getPlayground())) 
         filesystem::remove_all(file.path());
 }
 
@@ -20,20 +20,6 @@ int main(int argc, char *argv[])
     else if (argc > 2)
     {
         cerr << "Warning, too many arguments. Ignoring them." << endl;
-    }
-
-    Config *globalConf = new Config;
-    globalConf->load(CONFIG_FILE_NAME);
-
-    string sourceCodePath = argv[1];
-    if (compile(sourceCodePath, globalConf)) {
-        return 1;
-    }
-
-    string tmp_input = "/home/zlabtest/playground/input/";
-    if (runProgram(tmp_input, globalConf))
-    {
-        return 1;
     }
 
     //clearFiles(compParams);

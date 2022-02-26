@@ -2,7 +2,7 @@
 
 int compile(const Task *task, const char sourceCodeFile[])
 {
-    if (sourceCodeFile[0] == '/0')
+    if (sourceCodeFile[0] == '\0')
     {
         cerr << "Path is empty. " << sourceCodeFile << endl;
         return 1;
