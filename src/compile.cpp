@@ -1,8 +1,8 @@
 #include "compile.hpp"
 
-int compile(const Task *task, const string &sourceCodeFile)
+int compile(const Task *task, const char sourceCodeFile[])
 {
-    if (sourceCodeFile.empty())
+    if (sourceCodeFile[0] == '/0')
     {
         cerr << "Path is empty. " << sourceCodeFile << endl;
         return 1;
@@ -15,11 +15,11 @@ int compile(const Task *task, const string &sourceCodeFile)
 
     cout << "Compiling source code from: " << sourceCodeFile << endl;
 
-    string binFile = task->config->pathToPlayground + task->config->outputBinaryFileName;
-    string errFile = task->config->pathToPlayground + task->config->compileStdErrFileName;
+    const string& binFile = task->getOutputBinaryFile();
+    const string& errFile = task->getOutputErrorsFile();
 
     //g++ [args] -o [out.bin] [x.cpp] 2> [err]
-    const string cmd = "g++ " + task->compileArgs +
+    const string cmd = "g++ " + task->getCompileArgs() +
             " -o " + binFile +
             " " + sourceCodeFile +
             " 2> " + errFile;
@@ -57,28 +57,28 @@ int compile(const Task *task, const string &sourceCodeFile)
     return 0;
 }
 
-int runProgram(const Test *test)
+int runProgram(const Task *task)
 {
-    if (!filesystem::exists(test->testsInputPath))
+    if (!filesystem::exists(task->getInputData()))
     {
-        cerr << "Path does not exists. " <<  test->testsInputPath << endl;
+        cerr << "Path does not exists. " <<  task->getInputData() << endl;
         return 1;
     }
 
-    cout << "Executing program with inputs from: " << test->testsInputPath << endl;
+    cout << "Executing program with inputs from: " << task->getInputData() << endl;
 
-    for (auto &file : filesystem::directory_iterator(test->testsInputPath)) {
+    for (auto &file : filesystem::directory_iterator(task->getInputData())) {
         if (!file.exists() || file.is_directory())
             continue;
 
         cout << "Test " << file.path().filename().string() << endl;
 
         //( time -f '%E' timeout [x] cat [file] | [bin] > [output] ) > [time]
-        const string cmd = "( time -f '%E' timeout " + test->task->maxTime +
+        const string cmd = "( time -f '%E' timeout " + task->getMaxTime() +
             " cat " + file.path().string() +
-            " | " + test->task->config->pathToPlayground + test->task->config->outputBinaryFileName +
-            " > " + test->task->config->outputDataPath + file.path().filename().string() +
-            "_out ) 2> " + test->task->config->outputDataPath + file.path().filename().string() + "_out_time";
+            " | " + task->getOutputBinaryFile() +
+            " > " + task->getOutputData() + file.path().filename().string() +
+            "_out ) 2> " + task->getOutputErrorsFile() + file.path().filename().string() + "_out_time";
         system(cmd.c_str());
     }
 

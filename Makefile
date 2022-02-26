@@ -20,4 +20,4 @@ init:
 clean:
 	rm -r $(OBJ_DIR)
 	rm $(SRC_DIR)/*gch
-	rm zlabtest config.json 2> /dev/null || true
+	rm zlabtest 2> /dev/null || true
