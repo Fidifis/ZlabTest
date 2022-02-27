@@ -1,5 +1,6 @@
 #pragma once
 #include "headers.hpp"
+#include "stringSubstitution.hpp"
 
 using namespace nlohmann;
 
@@ -9,6 +10,7 @@ private:
     string taskName = "unnamed";
     string maxTime = "3";
     string compileArgs = "-Wall -pedantic";
+
     string inputData = "./$(taskName)/input/";
     string referenceData = "./$(taskName)/reference/";
     string playground = "./playground/";
@@ -17,15 +19,18 @@ private:
     string outputErrorsFile = "$(playground)/$(taskName)/errs";
     string outputRunTimeFile = "$(playground)/$(taskName)/time";
 
-    void loadParameters(const json &js);
-
-    void substituteNames();
-
 public:
     Task(const char path[], const char configPath[]);
 
     void runTests(const char sourceCodeFile[]) const;
 
+private:
+    void loadParameters(const json &js);
+
+    void substituteNames();
+    inline bool __substituteNames(string &arg);
+
+public:
     const string& getTaskName() const { return taskName; }
     const string& getMaxTime() const { return maxTime; }
     const string& getCompileArgs() const { return compileArgs; }
