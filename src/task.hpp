@@ -1,6 +1,6 @@
 #pragma once
 #include "headers.hpp"
-#include "stringSubstitution.hpp"
+#include "stringSubstitution.cpp" //TODO: vyřešit aby fungoval hpp
 
 using namespace nlohmann;
 

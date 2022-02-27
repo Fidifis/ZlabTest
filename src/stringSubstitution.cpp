@@ -12,17 +12,6 @@ inline bool __findPosition(const string &text, size_t &startPos, size_t &length)
     return false;
 }
 
-inline bool getSubstVarName(const string &text, string &name)
-{
-    size_t start, len;
-    if (__findPosition(text, start, len))
-    {
-        name = text.substr(start, len);
-        return true;
-    }
-    else return false;
-}
-
 inline bool getSubstVarName(const string &text, string &name, size_t &startPosition, size_t &length)
 {
     if (__findPosition(text, startPosition, length))
@@ -33,6 +22,17 @@ inline bool getSubstVarName(const string &text, string &name, size_t &startPosit
     else return false;
 }
 
+inline bool getSubstVarName(const string &text, string &name)
+{
+    size_t start, len;
+    return getSubstVarName(text, name, start, len);
+}
+
+inline void substitute(string &text, const string &substitution, const size_t startPosition, const size_t length)
+{
+    text.replace(startPosition, length, substitution);
+}
+
 inline void substitute(string &text, const string &substitution)
 {
     size_t start, end;
@@ -40,9 +40,4 @@ inline void substitute(string &text, const string &substitution)
     {
         substitute(text, substitution, start, end - start);
     }
-}
-
-inline void substitute(string &text, const string &substitution, const size_t startPosition, const size_t length)
-{
-    text.replace(startPosition, length, substitution);
 }
