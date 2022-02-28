@@ -19,16 +19,21 @@ private:
     string outputErrorsFile = "$(playground)/$(taskName)/errs";
     string outputRunTimeFile = "$(playground)/$(taskName)/time";
 
+    bool isMaster = true;
+    vector<Task*> tasks;
+
 public:
     Task(const char path[], const char configPath[]);
+    Task(const Task *task, const string &taskName, const json &js);
 
     void runTests(const char sourceCodeFile[]) const;
 
 private:
+    void copy(const Task *task);
     void loadParameters(const json &js);
 
     void substituteNames();
-    inline bool __substituteNames(string &arg);
+    inline bool substituteNames(string &arg);
 
 public:
     const string& getTaskName() const { return taskName; }
