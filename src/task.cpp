@@ -180,7 +180,16 @@ inline bool Task::substituteNames(string &arg)
 
     if (getSubstVarName(arg, name, start, length))
     {
-        if (!name.compare("inputData"))
+        if (!name.compare("taskName"))
+            substitute(arg, taskName, start, length);
+
+        else if (!name.compare("maxTime"))
+            substitute(arg, maxTime, start, length);
+
+        else if (!name.compare("compileArgs"))
+            substitute(arg, compileArgs, start, length);
+
+        else if (!name.compare("inputData"))
             substitute(arg, inputData, start, length);
 
         else if (!name.compare("referenceData"))
