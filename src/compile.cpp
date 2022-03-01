@@ -4,19 +4,24 @@ int compile(const Task *task, const char sourceCodeFile[])
 {
     if (sourceCodeFile[0] == '\0')
     {
-        cerr << "Path is empty. " << sourceCodeFile << endl;
+        cerr << "Path is empty: " << sourceCodeFile << endl;
+        return 1;
+    }
+    if (!filesystem::exists(sourceCodeFile))
+    {
+        cerr << "File does not exists: " << sourceCodeFile << endl;
         return 1;
     }
     if (filesystem::is_directory(sourceCodeFile))
     {
-        cerr << "Given file is a directory. " << sourceCodeFile << endl;
+        cerr << "Given file is a directory: " << sourceCodeFile << endl;
         return 1;
     }
 
     cout << "Compiling source code from: " << sourceCodeFile << endl;
 
-    const string& binFile = task->getOutputBinaryFile();
-    const string& errFile = task->getOutputErrorsFile();
+    const string &binFile = task->getOutputBinaryFile();
+    const string &errFile = task->getOutputErrorsFile();
 
     //g++ [args] -o [out.bin] [x.cpp] 2> [err]
     const string cmd = "g++ " + task->getCompileArgs() +
@@ -59,15 +64,21 @@ int compile(const Task *task, const char sourceCodeFile[])
 
 int runProgram(const Task *task)
 {
-    if (!filesystem::exists(task->getInputData()))
+    const string &inputData = task->getInputData();
+    if (!filesystem::exists(inputData))
     {
-        cerr << "Path does not exists. " <<  task->getInputData() << endl;
+        cerr << "Path does not exists: " <<  inputData << endl;
+        return 1;
+    }
+    if (!filesystem::is_directory(inputData))
+    {
+        cerr << "Path is not directory: " <<  inputData << endl;
         return 1;
     }
 
-    cout << "Executing program with inputs from: " << task->getInputData() << endl;
+    cout << "Executing program with inputs from: " << inputData << endl;
 
-    for (auto &file : filesystem::directory_iterator(task->getInputData())) {
+    for (auto &file : filesystem::directory_iterator(inputData)) {
         if (!file.exists() || file.is_directory())
             continue;
 
