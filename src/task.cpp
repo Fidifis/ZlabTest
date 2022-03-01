@@ -2,7 +2,6 @@
 
 Task::Task(const char path[], const char configPath[] = "")
 {
-    isMaster = true;
     json js, conf;
     bool haveConf = false;
 
@@ -61,17 +60,39 @@ Task::Task(const char path[], const char configPath[] = "")
         {
             json &testJS = item.value();
             Task *testTask = new Task(this, item.key(), testJS);
+            tasks.push_back(testTask);
         }
     }
 }
 
 Task::Task(const Task *task, const string &taskName, const json &js)
 {
-    isMaster = false;
     copy(task);
     this->taskName = taskName;
 
     loadParameters(js);
+}
+
+Task::~Task()
+{
+    for (Task *t : tasks)
+    {
+        delete t;
+    }
+}
+
+void Task::runTests(const char sourceCodeFile[]) const
+{
+    bool compiled = false;
+    for (Task *t : tasks)
+    {
+        compiled = !t->recompile && compiled;
+        if (!compiled)
+            compile(t, sourceCodeFile);
+
+        runProgram(t);
+        compiled = !t->recompile;
+    }
 }
 
 void Task::copy(const Task *task)
@@ -93,8 +114,14 @@ void Task::loadParameters(const json &js)
         maxTime = js["maxTime"];
 
     if (js.contains("compileArgs"))
-        compileArgs = js["compileArgs"];
-
+    {
+        const string &_compileArgs = js["compileArgs"];
+        if (compileArgs.compare(_compileArgs))
+        {
+            recompile = true;
+            compileArgs = _compileArgs;
+        }
+    }
     if (js.contains("inputData"))
         inputData = js["inputData"];
 

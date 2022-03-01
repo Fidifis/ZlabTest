@@ -1,6 +1,7 @@
 #pragma once
 #include "headers.hpp"
 #include "stringSubstitution.cpp" //TODO: vyřešit aby fungoval hpp
+#include "compile.hpp"
 
 using namespace nlohmann;
 
@@ -19,16 +20,19 @@ private:
     string outputErrorsFile = "$(playground)/$(taskName)/errs";
     string outputRunTimeFile = "$(playground)/$(taskName)/time";
 
-    bool isMaster = true;
+    bool recompile = false;
+    
     vector<Task*> tasks;
 
 public:
     Task(const char path[], const char configPath[]);
-    Task(const Task *task, const string &taskName, const json &js);
+    ~Task();
 
     void runTests(const char sourceCodeFile[]) const;
 
 private:
+    Task(const Task *task, const string &taskName, const json &js);
+
     void copy(const Task *task);
     void loadParameters(const json &js);
 
