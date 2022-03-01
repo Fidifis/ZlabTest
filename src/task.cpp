@@ -48,17 +48,17 @@ Task::Task(const char path[], const char configPath[] = "")
 
     if (js.contains("shared"))
     {
-        json &shared = js["shared"];
+        const json &shared = js["shared"];
         loadParameters(shared);
     }
 
     substituteNames();
 
-    for (auto &item : js.items())
+    for (const auto &item : js.items())
     {
         if (item.key().compare("shared"))
         {
-            json &testJS = item.value();
+            const json &testJS = item.value();
             Task *testTask = new Task(this, item.key(), testJS);
             tasks.push_back(testTask);
         }
