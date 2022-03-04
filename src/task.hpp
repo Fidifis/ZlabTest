@@ -3,8 +3,6 @@
 #include "stringSubstitution.cpp" //TODO: vyřešit aby fungoval hpp
 #include "compile.hpp"
 
-using namespace nlohmann;
-
 class Task
 {
 private:
@@ -21,25 +19,22 @@ private:
     string outputRunTimeFile = "$(playground)/$(taskName)/time";
 
     bool recompile = false;
-    
     vector<Task*> tasks;
 
+    Task(const Task *task, const string &taskName, const nlohmann::json &js);
+
+    void copy(const Task *task);
+    void loadParameters(const nlohmann::json &js);
+
+    void substituteNames();
+    inline bool substituteNames(string &arg);
+    
 public:
     Task(const char path[], const char configPath[]);
     ~Task();
 
     void runTests(const char sourceCodeFile[]) const;
 
-private:
-    Task(const Task *task, const string &taskName, const json &js);
-
-    void copy(const Task *task);
-    void loadParameters(const json &js);
-
-    void substituteNames();
-    inline bool substituteNames(string &arg);
-
-public:
     const string& getTaskName() const { return taskName; }
     const string& getMaxTime() const { return maxTime; }
     const string& getCompileArgs() const { return compileArgs; }

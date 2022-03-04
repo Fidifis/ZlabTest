@@ -1,5 +1,7 @@
 #include "task.hpp"
 
+using namespace nlohmann;
+
 Task::Task(const char path[], const char configPath[] = "")
 {
     json js, conf;
