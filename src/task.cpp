@@ -58,7 +58,8 @@ Task::Task(const char path[], const char configPath[] = "")
 
     for (const auto &item : js.items())
     {
-        if (item.key().compare("shared") != 0)
+        if (item.key().compare("shared") != 0 &&
+            item.key().compare("taskName") != 0)
         {
             const json &testJS = item.value();
             Task *testTask = new Task(this, item.key(), testJS);

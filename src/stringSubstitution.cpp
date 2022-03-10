@@ -5,7 +5,7 @@ inline bool __findPosition(const string &text, size_t &startPos, size_t &length)
     startPos = text.find(__startToken, 0);
     if (startPos != string::npos)
     {
-        length = text.find(__endToken, startPos) - startPos;
+        length = text.find(__endToken, startPos) - startPos + 1;
         if (length != string::npos)
             return true;
     }
@@ -16,7 +16,7 @@ inline bool getSubstVarName(const string &text, string &name, size_t &startPosit
 {
     if (__findPosition(text, startPosition, length))
     {
-        name = text.substr(startPosition, length);
+        name = text.substr(startPosition + 2, length - 3);
         return true;
     }
     else return false;

@@ -86,13 +86,13 @@ int runProgram(const Task *task)
 
         cout << "Test " << filename << endl;
 
-        //( time -f '%E' timeout [x] cat [file] | [bin] > [output] 2> [errors] ) > [time]
+        //( time -f '%E' timeout [x] cat [file] | [bin] > [output] 2> [errors] ) 2> [time]
         const string cmd = "( time -f '%E' timeout " + task->getMaxTime() +
             " cat " + file.path().string() +
             " | " + task->getOutputBinaryFile() +
             " > " + task->getOutputData() + filename + "_out" +
             " 2> "+ task->getOutputErrorsFile() + filename + "_err" +
-            " ) > " + task->getOutputRunTimeFile() + filename + "_time";
+            " ) 2> " + task->getOutputRunTimeFile() + filename + "_time";
         system(cmd.c_str());
     }
 
