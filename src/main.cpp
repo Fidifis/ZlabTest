@@ -10,17 +10,51 @@ void clearFiles(const Task *task)
         filesystem::remove_all(file.path());
 }
 
+void printHelp()
+{
+    cout << "usage: zlabtest [-c] [-t] <task.json> <source.cpp> [<config.json>]" << endl;
+}
+
+inline char getOption(char *argv)
+{
+    if (argv != nullptr && argv[0] == '-' && argv[1] != '\0' )
+    {
+        return argv[1];
+    }
+    else return '\0';
+}
+
 int main(int argc, char *argv[])
 {
-    if (argc < 2)
+    const char *csourceCode, *ctask,
+    *cconfig = CONFIG_FILE_NAME;
+
+    if (argc <= 2)
     {
-        cerr << "No arguments. Terminating." << endl;
+        printHelp();
         return 1;
     }
-    else if (argc > 2)
+    else if (argc == 3)
     {
-        cerr << "Warning, too many arguments. Ignoring them." << endl;
+        ctask = argv[1];
+        csourceCode = argv[2];
+    }
+    else if (argc == 4)
+    {
+        ctask = argv[1];
+        csourceCode = argv[2];
+        cconfig = argv[3];
+    }
+    else
+    {
+        cerr << "Too many arguments." << endl;
+        return 1;
     }
 
-    //clearFiles(compParams);
+    Task *task = new Task(ctask, cconfig);
+
+    task->runTests(csourceCode);
+
+    delete task;
+    return 0;
 }
