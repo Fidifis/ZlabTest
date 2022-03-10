@@ -82,14 +82,17 @@ int runProgram(const Task *task)
         if (!file.exists() || file.is_directory())
             continue;
 
-        cout << "Test " << file.path().filename().string() << endl;
+        const string filename = file.path().filename().string();
 
-        //( time -f '%E' timeout [x] cat [file] | [bin] > [output] ) > [time]
+        cout << "Test " << filename << endl;
+
+        //( time -f '%E' timeout [x] cat [file] | [bin] > [output] 2> [errors] ) > [time]
         const string cmd = "( time -f '%E' timeout " + task->getMaxTime() +
             " cat " + file.path().string() +
             " | " + task->getOutputBinaryFile() +
-            " > " + task->getOutputData() + file.path().filename().string() +
-            "_out ) 2> " + task->getOutputErrorsFile() + file.path().filename().string() + "_out_time";
+            " > " + task->getOutputData() + filename + "_out" +
+            " 2> "+ task->getOutputErrorsFile() + filename + "_err" +
+            " ) > " + task->getOutputRunTimeFile() + filename + "_time";
         system(cmd.c_str());
     }
 

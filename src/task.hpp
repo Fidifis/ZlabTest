@@ -15,8 +15,8 @@ private:
     string playground = "./playground/";
     string outputData = "$(playground)/$(taskName)/ouput/";
     string outputBinaryFile = "$(playground)/$(taskName)/out.bin";
-    string outputErrorsFile = "$(playground)/$(taskName)/errs";
-    string outputRunTimeFile = "$(playground)/$(taskName)/time";
+    string outputErrorsFile = "$(playground)/$(taskName)/errs/";
+    string outputRunTimeFile = "$(playground)/$(taskName)/time/";
 
     bool recompile = false;
     vector<Task*> tasks;

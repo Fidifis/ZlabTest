@@ -58,7 +58,7 @@ Task::Task(const char path[], const char configPath[] = "")
 
     for (const auto &item : js.items())
     {
-        if (item.key().compare("shared"))
+        if (item.key().compare("shared") != 0)
         {
             const json &testJS = item.value();
             Task *testTask = new Task(this, item.key(), testJS);
@@ -73,6 +73,7 @@ Task::Task(const Task *task, const string &taskName, const json &js)
     this->taskName = taskName;
 
     loadParameters(js);
+    substituteNames();
 }
 
 Task::~Task()
