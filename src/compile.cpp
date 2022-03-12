@@ -20,8 +20,8 @@ int compile(const Task *task, const char sourceCodeFile[])
 
     cout << "Compiling source code from: " << sourceCodeFile << endl;
 
-    const string &binFile = task->getOutputBinaryFile();
-    const string &errFile = task->getOutputErrorsFile();
+    const string &binFile = task->getCompiledBinaryFile();
+    const string &errFile = task->getCompileErrorsFile();
 
     //g++ [args] -o [out.bin] [x.cpp] 2> [err]
     const string cmd = "g++ " + task->getCompileArgs() +
@@ -89,7 +89,7 @@ int runProgram(const Task *task)
         //( time -f '%E' timeout [x] cat [file] | [bin] > [output] 2> [errors] ) 2> [time]
         const string cmd = "( time -f '%E' timeout " + task->getMaxTime() +
             " cat " + file.path().string() +
-            " | " + task->getOutputBinaryFile() +
+            " | " + task->getCompiledBinaryFile() +
             " > " + task->getOutputData() + filename + "_out" +
             " 2> "+ task->getOutputErrorsFile() + filename + "_err" +
             " ) 2> " + task->getOutputRunTimeFile() + filename + "_time";

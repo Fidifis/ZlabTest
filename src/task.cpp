@@ -107,7 +107,8 @@ void Task::copy(const Task *task)
     referenceData = task->referenceData;
     playground = task->playground;
     outputData = task->outputData;
-    outputBinaryFile = task->outputBinaryFile;
+    compiledBinaryFile = task->compiledBinaryFile;
+    compileErrorsFile = task->compileErrorsFile;
     outputErrorsFile = task->outputErrorsFile;
     outputRunTimeFile = task->outputRunTimeFile;
 }
@@ -138,8 +139,11 @@ void Task::loadParameters(const json &js)
     if (js.contains("outputData"))
         outputData = js["outputData"];
 
-    if (js.contains("outputBinaryFile"))
-        outputBinaryFile = js["outputBinaryFile"];
+    if (js.contains("compiledBinaryFile"))
+        compiledBinaryFile = js["compiledBinaryFile"];
+
+    if (js.contains("compileErrorsFile"))
+        compileErrorsFile = js["compileErrorsFile"];
 
     if (js.contains("outputErrorsFile"))
         outputErrorsFile = js["outputErrorsFile"];
@@ -150,9 +154,16 @@ void Task::loadParameters(const json &js)
 
 void Task::substituteNames() {
     bool changed = true;
+    int loopProtect = 100;
     while (changed)
     {
         changed = false;
+
+        if (--loopProtect <= 0)
+        {
+            cerr << "Cyclical variable reference in json" << endl;
+            break;
+        }
         
         if (substituteNames(inputData))
             changed = true;
@@ -166,7 +177,10 @@ void Task::substituteNames() {
         if (substituteNames(outputData))
             changed = true;
         
-        if (substituteNames(outputBinaryFile))
+        if (substituteNames(compiledBinaryFile))
+            changed = true;
+
+        if (substituteNames(compileErrorsFile))
             changed = true;
         
         if (substituteNames(outputErrorsFile))
@@ -205,8 +219,11 @@ inline bool Task::substituteNames(string &arg)
         else if (!name.compare("outputData"))
             substitute(arg, outputData, start, length);
 
-        else if (!name.compare("outputBinaryFile"))
-            substitute(arg, outputBinaryFile, start, length);
+        else if (!name.compare("compiledBinaryFile"))
+            substitute(arg, compiledBinaryFile, start, length);
+
+        else if (!name.compare("compileErrorsFile"))
+            substitute(arg, compileErrorsFile, start, length);
 
         else if (!name.compare("outputErrorsFile"))
             substitute(arg, outputErrorsFile, start, length);

@@ -14,7 +14,8 @@ private:
     string referenceData = "./$(taskName)/reference/";
     string playground = "./playground/";
     string outputData = "$(playground)/$(taskName)/ouput/";
-    string outputBinaryFile = "$(playground)/$(taskName)/out.bin";
+    string compiledBinaryFile = "$(playground)/$(taskName)/out.bin";
+    string compileErrorsFile = "$(playground)/$(taskName)/out.err";
     string outputErrorsFile = "$(playground)/$(taskName)/errs/";
     string outputRunTimeFile = "$(playground)/$(taskName)/time/";
 
@@ -42,7 +43,8 @@ public:
     const string& getReferenceData() const { return referenceData; }
     const string& getPlayground() const { return playground; }
     const string& getOutputData() const { return outputData; }
-    const string& getOutputBinaryFile() const { return outputBinaryFile; }
+    const string& getCompiledBinaryFile() const { return compiledBinaryFile; }
+    const string& getCompileErrorsFile() const { return compileErrorsFile; }
     const string& getOutputErrorsFile() const { return outputErrorsFile; }
     const string& getOutputRunTimeFile() const { return outputRunTimeFile; }
 };
