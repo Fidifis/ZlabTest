@@ -1,8 +1,8 @@
 SRC_DIR := src
 OBJ_DIR := obj
 PCH := headers.hpp
-LDFLAGS :=
-CPPFLAGS := -std=c++17 -Wall -Wextra -pedantic -Wno-unused-result -O2
+LDFLAGS := -fsanitize=address
+CPPFLAGS := -std=c++17 -Wall -Wextra -pedantic -Wno-unused-result -O2 -g -fsanitize=address
 
 SRC_FILES := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ_FILES := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRC_FILES))
@@ -18,6 +18,5 @@ init:
 	g++ $(CPPFLAGS) $(SRC_DIR)/$(PCH)
 
 clean:
-	rm -r $(OBJ_DIR)
-	rm $(SRC_DIR)/*gch
-	rm zlabtest 2> /dev/null || true
+	rm -r $(OBJ_DIR) || true
+	rm $(SRC_DIR)/*gch zlabtest || true
