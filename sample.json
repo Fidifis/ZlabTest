@@ -1,0 +1,20 @@
+{
+    "taskName": "taskus_maximus",
+    "shared": {
+        "maxTime": "3",
+        "inputData": "./$(taskName)/$(testName)/input",
+        "compileArgs": "-std=c++17 -Wall -pedantic -O2",
+        "referenceData": "./$(taskName)/$(testName)/reference",
+        "outputData": "$(playground)/$(taskName)/$(testName)/output/",
+        "playground": "/home/zlabtest/playground/",
+        "compiledBinaryFile": "$(playground)/$(taskName)/out.bin",
+        "compileErrorsFile": "$(playground)/$(taskName)/compile_errors",
+        "outputErrors": "$(playground)/$(taskName)/$(testName)/errors/",
+        "outputRunTime": "$(playground)/$(taskName)/$(testName)/time/"
+    },
+    "zakladni_test": {},
+    "test_rychlosti": {
+    	"maxTime": "0.5",
+    	"compileArgs": "-std=c++17 -Wall -pedantic -O0"
+    }
+}
