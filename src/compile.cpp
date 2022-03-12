@@ -1,21 +1,18 @@
 #include "compile.hpp"
 
-int compile(const Task *task, const char sourceCodeFile[])
+Result compile(const Task *task, const char sourceCodeFile[])
 {
     if (sourceCodeFile[0] == '\0')
     {
-        cerr << "Path is empty: " << sourceCodeFile << endl;
-        return 1;
+        throw invalid_argument("source code file path is empty");
     }
     if (!filesystem::exists(sourceCodeFile))
     {
-        cerr << "File does not exists: " << sourceCodeFile << endl;
-        return 1;
+        throw invalid_argument("source code file does not exists");
     }
     if (filesystem::is_directory(sourceCodeFile))
     {
-        cerr << "Given file is a directory: " << sourceCodeFile << endl;
-        return 1;
+        throw invalid_argument("source code file is a directory");
     }
 
     cout << "Compiling source code from: " << sourceCodeFile << endl;
@@ -28,52 +25,51 @@ int compile(const Task *task, const char sourceCodeFile[])
             " -o " + binFile +
             " " + sourceCodeFile +
             " 2> " + errFile;
-    system(cmd.c_str());
+    int returnCode = system(cmd.c_str());
 
-    if (filesystem::exists(binFile))
+    if (returnCode == 0 && filesystem::exists(binFile))
     {
         if (filesystem::exists(errFile))
         {
             ifstream errfile(errFile);
             string content;
             getline(errfile, content, '\0');
+            errfile.close();
 
             if (content.empty())
             {
                 cout << "Compiled successfully." << endl;
+                return Result::success;
             }
             else
             {
                 cout << "Compiled with warnings." << endl;
+                return Result::warrings;
             }
-
-            errfile.close();
         }
         else
         {
             cout << "Compiled successfully." << endl;
+            return Result::success;
         }
     }
     else
     {
         cout << "Compilation failed." << endl;
+        return Result::fail;
     }
-
-    return 0;
 }
 
-int runProgram(const Task *task)
+void runProgram(const Task *task)
 {
     const string &inputData = task->getInputData();
     if (!filesystem::exists(inputData))
     {
-        cerr << "Path does not exists: " <<  inputData << endl;
-        return 1;
+        throw invalid_argument("Path does not exists: " + inputData);
     }
     if (!filesystem::is_directory(inputData))
     {
-        cerr << "Path is not directory: " <<  inputData << endl;
-        return 1;
+        throw invalid_argument("Path is not directory: " + inputData);
     }
 
     cout << "Executing program with inputs from: " << inputData << endl;
@@ -95,6 +91,4 @@ int runProgram(const Task *task)
             " ) 2> " + task->getOutputRunTime() + filename + "_time";
         system(cmd.c_str());
     }
-
-    return 0;
 }

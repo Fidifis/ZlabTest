@@ -4,6 +4,8 @@
 
 class Task;
 
-int compile(const Task *task, const char sourceCodeFile[]);
+enum class Result {success, warrings, fail};
 
-int runProgram(const Task *task);
+Result compile(const Task *task, const char sourceCodeFile[]);
+
+void runProgram(const Task *task);

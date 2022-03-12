@@ -53,7 +53,14 @@ int main(int argc, char *argv[])
 
     Task *task = new Task(ctask, cconfig);
 
-    task->runTests(csourceCode);
+    try
+    {
+        task->runTests(csourceCode);
+    }
+    catch(const exception& e)
+    {
+        cerr << e.what() << endl;
+    }
 
     delete task;
     return 0;
