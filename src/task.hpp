@@ -38,6 +38,7 @@ public:
     void runTests(const char sourceCodeFile[]) const;
 
     const string& getTaskName() const { return taskName; }
+    const string& getTestName() const { return testName; }
     const string& getMaxTime() const { return maxTime; }
     const string& getCompileArgs() const { return compileArgs; }
     const string& getInputData() const { return inputData; }

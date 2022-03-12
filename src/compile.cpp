@@ -84,7 +84,7 @@ int runProgram(const Task *task)
 
         const string filename = file.path().filename().string();
 
-        cout << "Test: " << task->getTaskName() << ": " << filename << endl;
+        cout << task->getTaskName() << ": " << task->getTestName() << ": " << filename << endl;
 
         //( time -f '%E' timeout [x] cat [file] | [bin] > [output] 2> [errors] ) 2> [time]
         const string cmd = "( time -f '%E' timeout " + task->getMaxTime() +
