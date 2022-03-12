@@ -17,8 +17,8 @@ private:
     string outputData = "$(playground)/$(taskName)/$(testName)/ouput/";
     string compiledBinaryFile = "$(playground)/$(taskName)/out.bin";
     string compileErrorsFile = "$(playground)/$(taskName)/out.err";
-    string outputErrorsFile = "$(playground)/$(taskName)/errs/";
-    string outputRunTimeFile = "$(playground)/$(taskName)/time/";
+    string outputErrors = "$(playground)/$(taskName)/$(testName)/errs/";
+    string outputRunTime = "$(playground)/$(taskName)/$(testName)/time/";
 
     bool recompile = false;
     vector<Task*> tasks;
@@ -46,8 +46,8 @@ public:
     const string& getOutputData() const { return outputData; }
     const string& getCompiledBinaryFile() const { return compiledBinaryFile; }
     const string& getCompileErrorsFile() const { return compileErrorsFile; }
-    const string& getOutputErrorsFile() const { return outputErrorsFile; }
-    const string& getOutputRunTimeFile() const { return outputRunTimeFile; }
+    const string& getOutputErrors() const { return outputErrors; }
+    const string& getOutputRunTime() const { return outputRunTime; }
 };
 
 /*

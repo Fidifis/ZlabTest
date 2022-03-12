@@ -91,8 +91,8 @@ int runProgram(const Task *task)
             " cat " + file.path().string() +
             " | " + task->getCompiledBinaryFile() +
             " > " + task->getOutputData() + filename + "_out" +
-            " 2> "+ task->getOutputErrorsFile() + filename + "_err" +
-            " ) 2> " + task->getOutputRunTimeFile() + filename + "_time";
+            " 2> "+ task->getOutputErrors() + filename + "_err" +
+            " ) 2> " + task->getOutputRunTime() + filename + "_time";
         system(cmd.c_str());
     }
 

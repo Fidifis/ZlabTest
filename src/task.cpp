@@ -110,8 +110,8 @@ void Task::copy(const Task *task)
     outputData = task->outputData;
     compiledBinaryFile = task->compiledBinaryFile;
     compileErrorsFile = task->compileErrorsFile;
-    outputErrorsFile = task->outputErrorsFile;
-    outputRunTimeFile = task->outputRunTimeFile;
+    outputErrors = task->outputErrors;
+    outputRunTime = task->outputRunTime;
 }
 
 void Task::loadParameters(const json &js)
@@ -146,11 +146,11 @@ void Task::loadParameters(const json &js)
     if (js.contains("compileErrorsFile"))
         compileErrorsFile = js["compileErrorsFile"];
 
-    if (js.contains("outputErrorsFile"))
-        outputErrorsFile = js["outputErrorsFile"];
+    if (js.contains("outputErrors"))
+        outputErrors = js["outputErrors"];
 
-    if (js.contains("outputRunTimeFile"))
-        outputRunTimeFile = js["outputRunTimeFile"];
+    if (js.contains("outputRunTime"))
+        outputRunTime = js["outputRunTime"];
 }
 
 void Task::substituteNames() {
@@ -184,10 +184,10 @@ void Task::substituteNames() {
         if (substituteNames(compileErrorsFile))
             changed = true;
         
-        if (substituteNames(outputErrorsFile))
+        if (substituteNames(outputErrors))
             changed = true;
         
-        if (substituteNames(outputRunTimeFile))
+        if (substituteNames(outputRunTime))
             changed = true;
     }
 }
@@ -229,11 +229,11 @@ inline bool Task::substituteNames(string &arg)
         else if (!name.compare("compileErrorsFile"))
             substitute(arg, compileErrorsFile, start, length);
 
-        else if (!name.compare("outputErrorsFile"))
-            substitute(arg, outputErrorsFile, start, length);
+        else if (!name.compare("outputErrors"))
+            substitute(arg, outputErrors, start, length);
 
-        else if (!name.compare("outputRunTimeFile"))
-            substitute(arg, outputRunTimeFile, start, length);
+        else if (!name.compare("outputRunTime"))
+            substitute(arg, outputRunTime, start, length);
 
         else return false;
 
