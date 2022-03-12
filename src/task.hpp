@@ -7,13 +7,14 @@ class Task
 {
 private:
     string taskName = "unnamed";
+    string testName = "global";
     string maxTime = "3";
     string compileArgs = "-Wall -pedantic";
 
-    string inputData = "./$(taskName)/input/";
-    string referenceData = "./$(taskName)/reference/";
+    string inputData = "./$(taskName)/$(testName)/input/";
+    string referenceData = "./$(taskName)/$(testName)/reference/";
     string playground = "./playground/";
-    string outputData = "$(playground)/$(taskName)/ouput/";
+    string outputData = "$(playground)/$(taskName)/$(testName)/ouput/";
     string compiledBinaryFile = "$(playground)/$(taskName)/out.bin";
     string compileErrorsFile = "$(playground)/$(taskName)/out.err";
     string outputErrorsFile = "$(playground)/$(taskName)/errs/";
@@ -22,7 +23,7 @@ private:
     bool recompile = false;
     vector<Task*> tasks;
 
-    Task(const Task *task, const string &taskName, const nlohmann::json &js);
+    Task(const Task *task, const string &testName, const nlohmann::json &js);
 
     void copy(const Task *task);
     void loadParameters(const nlohmann::json &js);

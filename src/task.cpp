@@ -54,7 +54,7 @@ Task::Task(const char path[], const char configPath[] = "")
         loadParameters(shared);
     }
 
-    substituteNames();
+    //substituteNames();
 
     for (const auto &item : js.items())
     {
@@ -68,10 +68,10 @@ Task::Task(const char path[], const char configPath[] = "")
     }
 }
 
-Task::Task(const Task *task, const string &taskName, const json &js)
+Task::Task(const Task *task, const string &testName, const json &js)
 {
     copy(task);
-    this->taskName = taskName;
+    this->testName = testName;
 
     loadParameters(js);
     substituteNames();
@@ -101,6 +101,7 @@ void Task::runTests(const char sourceCodeFile[]) const
 
 void Task::copy(const Task *task)
 {
+    taskName = task->taskName;
     maxTime = task->maxTime;
     compileArgs = task->compileArgs;
     inputData = task->inputData;
@@ -200,6 +201,9 @@ inline bool Task::substituteNames(string &arg)
     {
         if (!name.compare("taskName"))
             substitute(arg, taskName, start, length);
+
+        else if (!name.compare("testName"))
+            substitute(arg, testName, start, length);
 
         else if (!name.compare("maxTime"))
             substitute(arg, maxTime, start, length);
