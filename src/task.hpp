@@ -30,6 +30,8 @@ private:
 
     void substituteNames();
     inline bool substituteNames(string &arg);
+
+    inline void addSlashOnEnd(string &arg);
     
 public:
     Task(const char path[], const char configPath[]);

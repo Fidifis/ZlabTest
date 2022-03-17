@@ -129,28 +129,50 @@ void Task::loadParameters(const json &js)
         }
     }
     if (js.contains("inputData"))
+    {
         inputData = js["inputData"];
+        addSlashOnEnd(inputData);
+    }
 
     if (js.contains("referenceData"))
+    {
         referenceData = js["referenceData"];
+        addSlashOnEnd(referenceData);
+    }
 
     if (js.contains("playground"))
+    {
         playground = js["playground"];
+        addSlashOnEnd(playground);
+    }
 
     if (js.contains("outputData"))
+    {
         outputData = js["outputData"];
+        addSlashOnEnd(outputData);
+    }
 
     if (js.contains("compiledBinaryFile"))
+    {
         compiledBinaryFile = js["compiledBinaryFile"];
+    }
 
     if (js.contains("compileErrorsFile"))
+    {
         compileErrorsFile = js["compileErrorsFile"];
+    }
 
     if (js.contains("outputErrors"))
+    {
         outputErrors = js["outputErrors"];
+        addSlashOnEnd(outputErrors);
+    }
 
     if (js.contains("outputRunTime"))
+    {
         outputRunTime = js["outputRunTime"];
+        addSlashOnEnd(outputRunTime);
+    }
 }
 
 void Task::substituteNames() {
@@ -240,4 +262,11 @@ inline bool Task::substituteNames(string &arg)
         return true;
     }
     else return false;
+}
+
+void Task::addSlashOnEnd(string &arg) {
+    if (arg.length() > 0 && arg[arg.length() - 1] != '/')
+    {
+        arg += '/';
+    }
 }
