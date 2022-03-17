@@ -38,9 +38,9 @@ public:
     ~Task();
 
     const Task* operator[] (int index) const { return tasks[index]; }
-    size_t count() const { return tasks.size(); }
+    size_t size() const { return tasks.size(); }
 
-    void runTests(const char sourceCodeFile[]) const;
+    bool getRecompile() const { return recompile; }
 
     const string& getTaskName() const { return taskName; }
     const string& getTestName() const { return testName; }

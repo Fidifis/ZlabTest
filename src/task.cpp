@@ -85,20 +85,6 @@ Task::~Task()
     }
 }
 
-void Task::runTests(const char sourceCodeFile[]) const
-{
-    bool compiled = false;
-    for (Task *t : tasks)
-    {
-        compiled = !t->recompile && compiled;
-        if (!compiled)
-            compile(t, sourceCodeFile);
-
-        runProgram(t);
-        compiled = !t->recompile;
-    }
-}
-
 void Task::copy(const Task *task)
 {
     taskName = task->taskName;

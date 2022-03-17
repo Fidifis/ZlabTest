@@ -92,3 +92,18 @@ void runProgram(const Task *task)
         system(cmd.c_str());
     }
 }
+
+void runTests(const Task *task, const char sourceCodeFile[])
+{
+    bool compiled = false;
+    for (size_t i = 0; i < task->size(); ++i)
+    {
+        const Task *t = (*task)[i];
+        compiled = !t->getRecompile() && compiled;
+        if (!compiled)
+            compile(t, sourceCodeFile);
+
+        runProgram(t);
+        compiled = !t->getRecompile();
+    }
+}
