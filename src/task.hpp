@@ -37,6 +37,9 @@ public:
     Task(const char path[], const char configPath[]);
     ~Task();
 
+    const Task* operator[] (int index) const { return tasks[index]; }
+    size_t count() const { return tasks.size(); }
+
     void runTests(const char sourceCodeFile[]) const;
 
     const string& getTaskName() const { return taskName; }
