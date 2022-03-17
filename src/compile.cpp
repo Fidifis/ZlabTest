@@ -20,11 +20,11 @@ Result compile(const Task *task, const char sourceCodeFile[])
     const string &binFile = task->getCompiledBinaryFile();
     const string &errFile = task->getCompileErrorsFile();
 
-    //g++ [args] -o [out.bin] [x.cpp] 2> [err]
+    //g++ --args-- -o --out.bin-- --x.cpp-- 2> --err--
     const string cmd = "g++ " + task->getCompileArgs() +
-            " -o " + binFile +
-            " " + sourceCodeFile +
-            " 2> " + errFile;
+            " -o '" + binFile +
+            "' '" + sourceCodeFile +
+            "' 2> '" + errFile + "'";
     int returnCode = system(cmd.c_str());
 
     if (returnCode == 0 && filesystem::exists(binFile))
@@ -82,13 +82,13 @@ void runProgram(const Task *task)
 
         cout << task->getTaskName() << ": " << task->getTestName() << ": " << filename << endl;
 
-        //( time -f '%E' timeout [x] cat [file] | [bin] > [output] 2> [errors] ) 2> [time]
+        //( time -f '%E' timeout --time-- cat '--file--' | '--bin--' > '--output--' 2> '--errors--' ) 2> '--timeFile--'
         const string cmd = "( time -f '%E' timeout " + task->getMaxTime() +
-            " cat " + file.path().string() +
-            " | " + task->getCompiledBinaryFile() +
-            " > " + task->getOutputData() + filename + "_out" +
-            " 2> "+ task->getOutputErrors() + filename + "_err" +
-            " ) 2> " + task->getOutputRunTime() + filename + "_time";
+            " cat '" + file.path().string() +
+            "' | '" + task->getCompiledBinaryFile() +
+            "' > '" + task->getOutputData() + filename + "_out" +
+            "' 2> '"+ task->getOutputErrors() + filename + "_err" +
+            "' ) 2> '" + task->getOutputRunTime() + filename + "_time'";
         system(cmd.c_str());
     }
 }
