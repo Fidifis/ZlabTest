@@ -1,6 +1,6 @@
 #pragma once
 #include "headers.hpp"
-#include "stringSubstitution.cpp" //TODO: vyřešit aby fungoval hpp
+#include "stringSubstitution.hpp" //TODO: vyřešit aby fungoval hpp
 #include "compile.hpp"
 
 class Task
