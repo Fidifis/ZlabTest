@@ -29,7 +29,7 @@ private:
     void loadParameters(const nlohmann::json &js);
 
     void substituteNames();
-    inline bool substituteNames(string &arg);
+    bool substituteNames(string &arg);
 
     inline void addSlashOnEnd(string &arg);
     

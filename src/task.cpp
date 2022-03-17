@@ -214,7 +214,7 @@ void Task::substituteNames() {
     }
 }
 
-inline bool Task::substituteNames(string &arg)
+bool Task::substituteNames(string &arg)
 {
     size_t start, length;
     string name;
