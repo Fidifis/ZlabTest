@@ -20,7 +20,7 @@ Result compile(const Task *task, const char sourceCodeFile[])
     const string &binFile = task->getCompiledBinaryFile();
     const string &errFile = task->getCompileErrorsFile();
 
-    //g++ --args-- -o --out.bin-- --x.cpp-- 2> --err--
+    //g++ --args-- -o '--out.bin--' '--x.cpp--' 2> '--err--'
     const string cmd = "g++ " + task->getCompileArgs() +
             " -o '" + binFile +
             "' '" + sourceCodeFile +
