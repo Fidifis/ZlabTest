@@ -9,22 +9,34 @@
 class Task
 {
 private:
+    enum class ParamType {
+        path = 1, containVariables = 2, specialLoad = 4
+    };
+    inline friend Flags operator| (ParamType p1, ParamType p2)
+    {
+        return (Flags)p1 | (Flags)p2;
+    }
+    inline friend Flags operator& (Flags p1, ParamType p2)
+    {
+        return p1 & (Flags)p2;
+    }
+
     union
     {
         struct {
-            StringRef(taskName, "unnamed");
-            StringRef(testName, "global");
-            StringRef(maxTime, "3");
-            StringRef(compileArgs, "-Wall -pedantic");
+            StringRef(taskName, "unnamed", 0);
+            StringRef(testName, "global", 0);
+            StringRef(maxTime, "3", 0);
+            StringRef(compileArgs, "-Wall -pedantic", (Flags)ParamType::specialLoad);
 
-            StringRef(inputData, "./$(taskName)/$(testName)/input/");
-            StringRef(referenceData, "./$(taskName)/$(testName)/reference/");
-            StringRef(playground, "./playground/");
-            StringRef(outputData, "$(playground)/$(taskName)/$(testName)/ouput/");
-            StringRef(compiledBinaryFile, "$(playground)/$(taskName)/out.bin");
-            StringRef(compileErrorsFile, "$(playground)/$(taskName)/out.err");
-            StringRef(outputErrors, "$(playground)/$(taskName)/$(testName)/errs/");
-            StringRef(outputRunTime, "$(playground)/$(taskName)/$(testName)/time/");
+            StringRef(inputData, "./$(taskName)/$(testName)/input/", ParamType::path | ParamType::containVariables);
+            StringRef(referenceData, "./$(taskName)/$(testName)/reference/", ParamType::path | ParamType::containVariables);
+            StringRef(playground, "./playground/", ParamType::path | ParamType::containVariables);
+            StringRef(outputData, "$(playground)/$(taskName)/$(testName)/ouput/", ParamType::path | ParamType::containVariables);
+            StringRef(compiledBinaryFile, "$(playground)/$(taskName)/out.bin", (Flags)ParamType::containVariables);
+            StringRef(compileErrorsFile, "$(playground)/$(taskName)/out.err", (Flags)ParamType::containVariables);
+            StringRef(outputErrors, "$(playground)/$(taskName)/$(testName)/errs/", ParamType::path | ParamType::containVariables);
+            StringRef(outputRunTime, "$(playground)/$(taskName)/$(testName)/time/", ParamType::path | ParamType::containVariables);
         } param;
 
         array<stringRef, TASK_NUMBER_OF_PARAMETERS> paramArray;
@@ -35,7 +47,7 @@ private:
 
     Task(const Task *task, const string &testName, const nlohmann::json &js);
 
-    void copy(const Task *task);
+    inline void copy(const Task *task);
     void loadParameters(const nlohmann::json &js);
 
     void substituteAllNames();

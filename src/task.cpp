@@ -87,77 +87,34 @@ Task::~Task()
 
 void Task::copy(const Task *task)
 {
-    param.taskName = task->param.taskName;
-    param.maxTime = task->param.maxTime;
-    param.compileArgs = task->param.compileArgs;
-    param.inputData = task->param.inputData;
-    param.referenceData = task->param.referenceData;
-    param.playground = task->param.playground;
-    param.outputData = task->param.outputData;
-    param.compiledBinaryFile = task->param.compiledBinaryFile;
-    param.compileErrorsFile = task->param.compileErrorsFile;
-    param.outputErrors = task->param.outputErrors;
-    param.outputRunTime = task->param.outputRunTime;
+    for (size_t i = 0; i < paramArray.size(); ++i)
+    {
+        paramArray[i] = task->paramArray[i];
+    }
 }
 
 void Task::loadParameters(const json &js)
 {
-    if (js.contains("maxTime"))
-        param.maxTime = js["maxTime"];
-
-    if (js.contains("compileArgs"))
+    for (auto &item : paramArray)
     {
-        const string &_compileArgs = js["compileArgs"];
-        if (param.compileArgs.value.compare(_compileArgs))
+        if (item.flags & ParamType::specialLoad &&
+            item.key == param.compileArgs.key)
         {
-            recompile = true;
-            param.compileArgs = _compileArgs;
+            const string &_compileArgs = js[param.compileArgs.key];
+            if (param.compileArgs.value == _compileArgs)
+            {
+                recompile = true;
+                param.compileArgs = _compileArgs;
+            }
         }
-    }
-    if (js.contains("inputData"))
-    {
-        param.inputData = js["inputData"];
-        addSlashOnEnd(param.inputData);
-    }
-
-    if (js.contains("referenceData"))
-    {
-        param.referenceData = js["referenceData"];
-        addSlashOnEnd(param.referenceData);
-    }
-
-    if (js.contains("playground"))
-    {
-        param.playground = js["playground"];
-        addSlashOnEnd(param.playground);
-    }
-
-    if (js.contains("outputData"))
-    {
-        param.outputData = js["outputData"];
-        addSlashOnEnd(param.outputData);
-    }
-
-    if (js.contains("compiledBinaryFile"))
-    {
-        param.compiledBinaryFile = js["compiledBinaryFile"];
-    }
-
-    if (js.contains("compileErrorsFile"))
-    {
-        param.compileErrorsFile = js["compileErrorsFile"];
-    }
-
-    if (js.contains("outputErrors"))
-    {
-        param.outputErrors = js["outputErrors"];
-        addSlashOnEnd(param.outputErrors);
-    }
-
-    if (js.contains("outputRunTime"))
-    {
-        param.outputRunTime = js["outputRunTime"];
-        addSlashOnEnd(param.outputRunTime);
+        else if (js.contains(item.key))
+        {
+            item = js[item.key];
+            if (item.flags & ParamType::path)
+            {
+                addSlashOnEnd(item);
+            }
+        }
     }
 }
 
@@ -173,30 +130,15 @@ void Task::substituteAllNames() {
             cerr << "Cyclical variable reference in json" << endl;
             break;
         }
-        
-        if (substituteNames(param.inputData))
-            changed = true;
-        
-        if (substituteNames(param.referenceData))
-            changed = true;
-        
-        if (substituteNames(param.playground))
-            changed = true;
-        
-        if (substituteNames(param.outputData))
-            changed = true;
-        
-        if (substituteNames(param.compiledBinaryFile))
-            changed = true;
 
-        if (substituteNames(param.compileErrorsFile))
-            changed = true;
-        
-        if (substituteNames(param.outputErrors))
-            changed = true;
-        
-        if (substituteNames(param.outputRunTime))
-            changed = true;
+        for (auto &item : paramArray)
+        {
+            if (item.flags & ParamType::containVariables &&
+                substituteNames(item))
+            {
+                changed = true;
+            }
+        } 
     }
 }
 
@@ -207,47 +149,16 @@ bool Task::substituteNames(string &arg)
 
     if (getSubstVarName(arg, name, start, length))
     {
-        if (!name.compare(param.taskName.key))
-            substitute(arg, param.taskName, start, length);
-
-        else if (!name.compare("testName"))
-            substitute(arg, param.testName, start, length);
-
-        else if (!name.compare("maxTime"))
-            substitute(arg, param.maxTime, start, length);
-
-        else if (!name.compare("compileArgs"))
-            substitute(arg, param.compileArgs, start, length);
-
-        else if (!name.compare("inputData"))
-            substitute(arg, param.inputData, start, length);
-
-        else if (!name.compare("referenceData"))
-            substitute(arg, param.referenceData, start, length);
-
-        else if (!name.compare("playground"))
-            substitute(arg, param.playground, start, length);
-
-        else if (!name.compare("outputData"))
-            substitute(arg, param.outputData, start, length);
-
-        else if (!name.compare("compiledBinaryFile"))
-            substitute(arg, param.compiledBinaryFile, start, length);
-
-        else if (!name.compare("compileErrorsFile"))
-            substitute(arg, param.compileErrorsFile, start, length);
-
-        else if (!name.compare("outputErrors"))
-            substitute(arg, param.outputErrors, start, length);
-
-        else if (!name.compare("outputRunTime"))
-            substitute(arg, param.outputRunTime, start, length);
-
-        else return false;
-
-        return true;
+        for (auto &item : paramArray)
+        {
+            if (name == item.key)
+            {
+                substitute(arg, item, start, length);
+                return true;
+            }
+        }
     }
-    else return false;
+    return false;
 }
 
 void Task::addSlashOnEnd(string &arg) {
