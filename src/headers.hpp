@@ -7,6 +7,7 @@
 #include <filesystem>
 #include <fstream>
 #include <vector>
+#include <array>
 #include "json.hpp"
 
 using namespace std;

@@ -42,8 +42,8 @@ Task::Task(const char path[], const char configPath[] = "")
     }
 
     //Fill class atributes with values from json
-    if (js.contains("taskName"))
-        taskName = js["taskName"];
+    if (js.contains(param.taskName.key))
+        param.taskName = js[param.taskName.key];
 
     if (haveConf)
         loadParameters(conf);
@@ -59,7 +59,7 @@ Task::Task(const char path[], const char configPath[] = "")
     for (const auto &item : js.items())
     {
         if (item.key().compare("shared") != 0 &&
-            item.key().compare("taskName") != 0)
+            item.key().compare(param.taskName.key) != 0)
         {
             const json &testJS = item.value();
             Task *testTask = new Task(this, item.key(), testJS);
@@ -71,10 +71,10 @@ Task::Task(const char path[], const char configPath[] = "")
 Task::Task(const Task *task, const string &testName, const json &js)
 {
     copy(task);
-    this->testName = testName;
+    param.testName = testName;
 
     loadParameters(js);
-    substituteNames();
+    substituteAllNames();
 }
 
 Task::~Task()
@@ -87,81 +87,81 @@ Task::~Task()
 
 void Task::copy(const Task *task)
 {
-    taskName = task->taskName;
-    maxTime = task->maxTime;
-    compileArgs = task->compileArgs;
-    inputData = task->inputData;
-    referenceData = task->referenceData;
-    playground = task->playground;
-    outputData = task->outputData;
-    compiledBinaryFile = task->compiledBinaryFile;
-    compileErrorsFile = task->compileErrorsFile;
-    outputErrors = task->outputErrors;
-    outputRunTime = task->outputRunTime;
+    param.taskName = task->param.taskName;
+    param.maxTime = task->param.maxTime;
+    param.compileArgs = task->param.compileArgs;
+    param.inputData = task->param.inputData;
+    param.referenceData = task->param.referenceData;
+    param.playground = task->param.playground;
+    param.outputData = task->param.outputData;
+    param.compiledBinaryFile = task->param.compiledBinaryFile;
+    param.compileErrorsFile = task->param.compileErrorsFile;
+    param.outputErrors = task->param.outputErrors;
+    param.outputRunTime = task->param.outputRunTime;
 }
 
 void Task::loadParameters(const json &js)
 {
     if (js.contains("maxTime"))
-        maxTime = js["maxTime"];
+        param.maxTime = js["maxTime"];
 
     if (js.contains("compileArgs"))
     {
         const string &_compileArgs = js["compileArgs"];
-        if (compileArgs.compare(_compileArgs))
+        if (param.compileArgs.value.compare(_compileArgs))
         {
             recompile = true;
-            compileArgs = _compileArgs;
+            param.compileArgs = _compileArgs;
         }
     }
     if (js.contains("inputData"))
     {
-        inputData = js["inputData"];
-        addSlashOnEnd(inputData);
+        param.inputData = js["inputData"];
+        addSlashOnEnd(param.inputData);
     }
 
     if (js.contains("referenceData"))
     {
-        referenceData = js["referenceData"];
-        addSlashOnEnd(referenceData);
+        param.referenceData = js["referenceData"];
+        addSlashOnEnd(param.referenceData);
     }
 
     if (js.contains("playground"))
     {
-        playground = js["playground"];
-        addSlashOnEnd(playground);
+        param.playground = js["playground"];
+        addSlashOnEnd(param.playground);
     }
 
     if (js.contains("outputData"))
     {
-        outputData = js["outputData"];
-        addSlashOnEnd(outputData);
+        param.outputData = js["outputData"];
+        addSlashOnEnd(param.outputData);
     }
 
     if (js.contains("compiledBinaryFile"))
     {
-        compiledBinaryFile = js["compiledBinaryFile"];
+        param.compiledBinaryFile = js["compiledBinaryFile"];
     }
 
     if (js.contains("compileErrorsFile"))
     {
-        compileErrorsFile = js["compileErrorsFile"];
+        param.compileErrorsFile = js["compileErrorsFile"];
     }
 
     if (js.contains("outputErrors"))
     {
-        outputErrors = js["outputErrors"];
-        addSlashOnEnd(outputErrors);
+        param.outputErrors = js["outputErrors"];
+        addSlashOnEnd(param.outputErrors);
     }
 
     if (js.contains("outputRunTime"))
     {
-        outputRunTime = js["outputRunTime"];
-        addSlashOnEnd(outputRunTime);
+        param.outputRunTime = js["outputRunTime"];
+        addSlashOnEnd(param.outputRunTime);
     }
 }
 
-void Task::substituteNames() {
+void Task::substituteAllNames() {
     bool changed = true;
     int loopProtect = 100;
     while (changed)
@@ -174,28 +174,28 @@ void Task::substituteNames() {
             break;
         }
         
-        if (substituteNames(inputData))
+        if (substituteNames(param.inputData))
             changed = true;
         
-        if (substituteNames(referenceData))
+        if (substituteNames(param.referenceData))
             changed = true;
         
-        if (substituteNames(playground))
+        if (substituteNames(param.playground))
             changed = true;
         
-        if (substituteNames(outputData))
+        if (substituteNames(param.outputData))
             changed = true;
         
-        if (substituteNames(compiledBinaryFile))
+        if (substituteNames(param.compiledBinaryFile))
             changed = true;
 
-        if (substituteNames(compileErrorsFile))
+        if (substituteNames(param.compileErrorsFile))
             changed = true;
         
-        if (substituteNames(outputErrors))
+        if (substituteNames(param.outputErrors))
             changed = true;
         
-        if (substituteNames(outputRunTime))
+        if (substituteNames(param.outputRunTime))
             changed = true;
     }
 }
@@ -207,41 +207,41 @@ bool Task::substituteNames(string &arg)
 
     if (getSubstVarName(arg, name, start, length))
     {
-        if (!name.compare("taskName"))
-            substitute(arg, taskName, start, length);
+        if (!name.compare(param.taskName.key))
+            substitute(arg, param.taskName, start, length);
 
         else if (!name.compare("testName"))
-            substitute(arg, testName, start, length);
+            substitute(arg, param.testName, start, length);
 
         else if (!name.compare("maxTime"))
-            substitute(arg, maxTime, start, length);
+            substitute(arg, param.maxTime, start, length);
 
         else if (!name.compare("compileArgs"))
-            substitute(arg, compileArgs, start, length);
+            substitute(arg, param.compileArgs, start, length);
 
         else if (!name.compare("inputData"))
-            substitute(arg, inputData, start, length);
+            substitute(arg, param.inputData, start, length);
 
         else if (!name.compare("referenceData"))
-            substitute(arg, referenceData, start, length);
+            substitute(arg, param.referenceData, start, length);
 
         else if (!name.compare("playground"))
-            substitute(arg, playground, start, length);
+            substitute(arg, param.playground, start, length);
 
         else if (!name.compare("outputData"))
-            substitute(arg, outputData, start, length);
+            substitute(arg, param.outputData, start, length);
 
         else if (!name.compare("compiledBinaryFile"))
-            substitute(arg, compiledBinaryFile, start, length);
+            substitute(arg, param.compiledBinaryFile, start, length);
 
         else if (!name.compare("compileErrorsFile"))
-            substitute(arg, compileErrorsFile, start, length);
+            substitute(arg, param.compileErrorsFile, start, length);
 
         else if (!name.compare("outputErrors"))
-            substitute(arg, outputErrors, start, length);
+            substitute(arg, param.outputErrors, start, length);
 
         else if (!name.compare("outputRunTime"))
-            substitute(arg, outputRunTime, start, length);
+            substitute(arg, param.outputRunTime, start, length);
 
         else return false;
 

@@ -1,25 +1,35 @@
 #pragma once
 #include "headers.hpp"
-#include "stringSubstitution.hpp" //TODO: vyřešit aby fungoval hpp
+#include "stringSubstitution.hpp"
 #include "compile.hpp"
+#include "stringRef.hpp"
+
+#define TASK_NUMBER_OF_PARAMETERS 12
 
 class Task
 {
 private:
-    string taskName = "unnamed";
-    string testName = "global";
-    string maxTime = "3";
-    string compileArgs = "-Wall -pedantic";
+    union
+    {
+        struct {
+            StringRef(taskName, "unnamed");
+            StringRef(testName, "global");
+            StringRef(maxTime, "3");
+            StringRef(compileArgs, "-Wall -pedantic");
 
-    string inputData = "./$(taskName)/$(testName)/input/";
-    string referenceData = "./$(taskName)/$(testName)/reference/";
-    string playground = "./playground/";
-    string outputData = "$(playground)/$(taskName)/$(testName)/ouput/";
-    string compiledBinaryFile = "$(playground)/$(taskName)/out.bin";
-    string compileErrorsFile = "$(playground)/$(taskName)/out.err";
-    string outputErrors = "$(playground)/$(taskName)/$(testName)/errs/";
-    string outputRunTime = "$(playground)/$(taskName)/$(testName)/time/";
+            StringRef(inputData, "./$(taskName)/$(testName)/input/");
+            StringRef(referenceData, "./$(taskName)/$(testName)/reference/");
+            StringRef(playground, "./playground/");
+            StringRef(outputData, "$(playground)/$(taskName)/$(testName)/ouput/");
+            StringRef(compiledBinaryFile, "$(playground)/$(taskName)/out.bin");
+            StringRef(compileErrorsFile, "$(playground)/$(taskName)/out.err");
+            StringRef(outputErrors, "$(playground)/$(taskName)/$(testName)/errs/");
+            StringRef(outputRunTime, "$(playground)/$(taskName)/$(testName)/time/");
+        } param;
 
+        array<stringRef, TASK_NUMBER_OF_PARAMETERS> paramArray;
+    };
+    
     bool recompile = false;
     vector<Task*> tasks;
 
@@ -28,7 +38,7 @@ private:
     void copy(const Task *task);
     void loadParameters(const nlohmann::json &js);
 
-    void substituteNames();
+    void substituteAllNames();
     bool substituteNames(string &arg);
 
     inline void addSlashOnEnd(string &arg);
@@ -42,18 +52,18 @@ public:
 
     bool getRecompile() const { return recompile; }
 
-    const string& getTaskName() const { return taskName; }
-    const string& getTestName() const { return testName; }
-    const string& getMaxTime() const { return maxTime; }
-    const string& getCompileArgs() const { return compileArgs; }
-    const string& getInputData() const { return inputData; }
-    const string& getReferenceData() const { return referenceData; }
-    const string& getPlayground() const { return playground; }
-    const string& getOutputData() const { return outputData; }
-    const string& getCompiledBinaryFile() const { return compiledBinaryFile; }
-    const string& getCompileErrorsFile() const { return compileErrorsFile; }
-    const string& getOutputErrors() const { return outputErrors; }
-    const string& getOutputRunTime() const { return outputRunTime; }
+    const string& getTaskName() const { return param.taskName; }
+    const string& getTestName() const { return param.testName; }
+    const string& getMaxTime() const { return param.maxTime; }
+    const string& getCompileArgs() const { return param.compileArgs; }
+    const string& getInputData() const { return param.inputData; }
+    const string& getReferenceData() const { return param.referenceData; }
+    const string& getPlayground() const { return param.playground; }
+    const string& getOutputData() const { return param.outputData; }
+    const string& getCompiledBinaryFile() const { return param.compiledBinaryFile; }
+    const string& getCompileErrorsFile() const { return param.compileErrorsFile; }
+    const string& getOutputErrors() const { return param.outputErrors; }
+    const string& getOutputRunTime() const { return param.outputRunTime; }
 };
 
 /*
