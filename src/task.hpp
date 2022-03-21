@@ -12,14 +12,11 @@ private:
     enum class ParamType {
         path = 1, containVariables = 2, specialLoad = 4
     };
+    
     inline friend Flags operator| (ParamType p1, ParamType p2)
-    {
-        return (Flags)p1 | (Flags)p2;
-    }
+    { return (Flags)p1 | (Flags)p2; }
     inline friend Flags operator& (Flags p1, ParamType p2)
-    {
-        return p1 & (Flags)p2;
-    }
+    { return p1 & (Flags)p2; }
 
     union
     {

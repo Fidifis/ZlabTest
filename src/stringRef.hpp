@@ -1,7 +1,6 @@
 #pragma once
 #include "headers.hpp"
 
-//#define StringRef(name, value) stringRef name = stringRef(#name, value)
 //#define StringRef(name, value) stringRef name { #name, value }
 #define StringRef(name, value, flags) stringRef name { #name, value, flags }
 
@@ -37,11 +36,11 @@ struct stringRef
         this->flags = flags;
     }
 
-    //operator string() { return value; }
-    operator string&() { return value; }
-    //operator const string() const { return value; }
-    operator const string&() const { return value; }
+    //inline operator string() { return value; }
+    //inline operator const string() const { return value; }
+    inline operator string&() { return value; }
+    inline operator const string&() const { return value; }
 
-    stringRef& operator= (string str) { value = str; return *this; }
-    stringRef& operator= (const char * str) { value = str; return *this; }
+    inline stringRef& operator= (string str) { value = str; return *this; }
+    inline stringRef& operator= (const char * str) { value = str; return *this; }
 };
