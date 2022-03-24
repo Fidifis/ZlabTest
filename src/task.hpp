@@ -1,7 +1,6 @@
 #pragma once
 #include "headers.hpp"
 #include "stringSubstitution.hpp"
-#include "compile.hpp"
 #include "stringRef.hpp"
 
 #define param paramHolder.paramStruct
@@ -78,40 +77,3 @@ public:
     const string& getOutputErrors() const { return param.outputErrors.value; }
     const string& getOutputRunTime() const { return param.outputRunTime.value; }
 };
-
-/*
-sample json
-
-{
-    "taskName": "t",
-    "shared": {
-        "maxTime": "3",
-        "inputData": "/tests_dir",
-        "compileArgs": "-Wall -O2",
-        "referenceData": "/refs_dir/"
-        "outputData": "$(playgroud)/outs/"
-        "playground": "/home/zlabtest/playgroud/",
-        "outputBinaryFile": "$(playgroud)/out.bin",
-        "outputErrFile": "$(playground)/bordel/err.txt",
-        "outputRunTimeFile": "$(playground)/bordel/time.txt"
-    },
-    "test1": {
-        "inputData": "/tests_dir/test1/",  <- each test must have defined folder with input data. This can be ommited when the parent folder is defined in the "shared" block
-        "outputData": "$(playgroud)/outs/test1/,
-        "referenceData": "/refs_dir/test1/",
-        "compileArgs": "-Wall",
-        "maxTime": "1.5"
-        "outputBinaryFile": "$(playground)/compiled01.bin"
-    },
-    "test2": {
-        "outputData": "/path/out2/",
-        "referenceData": "/refs_dir/test2/"
-    },
-    "test3": {
-        "compileArgs": "-Wall",
-        "maxTime": "1.3"
-    },
-    "test4": {}
-}
-
-*/
