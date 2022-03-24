@@ -1,6 +1,6 @@
 #include "headers.hpp"
 #include "task.hpp"
-#include "compile.hpp"
+#include "compileAndRun.hpp"
 
 const char CONFIG_FILE_NAME[] = "config.json";
 

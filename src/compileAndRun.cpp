@@ -1,4 +1,4 @@
-#include "compile.hpp"
+#include "compileAndRun.hpp"
 
 Result compile(const Task *task, const char sourceCodeFile[])
 {
