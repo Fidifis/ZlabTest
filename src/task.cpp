@@ -69,16 +69,20 @@ cout << "tady lol" << endl;
             const json &testJS = item.value();
             Task *testTask = new Task(this, item.key(), testJS);
             tasks.push_back(testTask);
+            cout << "dalo se to tam" << endl;
         }
     }
 }
 
 Task::Task(const Task *task, const string &testName, const json &js)
 {
+    cout << "2 konstruktor" << endl;
     copy(task);
+    cout << "brambora" << endl;
     param.testName.value = testName;
-
+cout << "okurka" << endl;
     loadParameters(js);
+    cout << "salát" << endl;
     substituteAllNames();
 }
 
@@ -100,26 +104,39 @@ void Task::copy(const Task *task)
 
 void Task::loadParameters(const json &js)
 {
+    cout << "load paramansas" << endl;
     for (auto &item : paramArray)
     {
-        if (item.flags & ParamType::specialLoad &&
-            item.key == param.compileArgs.key)
-        {
-            const string &_compileArgs = js[param.compileArgs.key];
-            if (param.compileArgs.value == _compileArgs)
+        cout << "trutrurtu" << endl;
+        if (js.contains(item.key)) {
+            if (item.flags & ParamType::specialLoad &&
+                item.key == param.compileArgs.key)
             {
-                recompile = true;
-                param.compileArgs.value = _compileArgs;
+                cout << "lol lol" << endl;
+                const string &_compileArgs = js[param.compileArgs.key];
+                cout << "lulw lol" << endl;
+                if (param.compileArgs.value == _compileArgs)
+                {
+                    recompile = true;
+                    cout << "kokokokokoko" << endl;
+                    param.compileArgs.value = _compileArgs;
+                }
+                cout << "tady omegalul" << endl;
+            }
+            else
+            {
+                cout << "profesionalni debugovani" << endl;
+                item.value = js[item.key];
+                cout << "yes" << endl;
+                if (item.flags & ParamType::path)
+                {
+                    cout << "rododendron" << endl;
+                    addSlashOnEnd(item.value);
+                }
+                cout << "kulihrasek" << endl;
             }
         }
-        else if (js.contains(item.key))
-        {
-            item.value = js[item.key];
-            if (item.flags & ParamType::path)
-            {
-                addSlashOnEnd(item.value);
-            }
-        }
+        cout << "you spin me round round" << endl;
     }
 }
 

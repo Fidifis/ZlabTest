@@ -38,11 +38,11 @@ private:
             StringRef(outputErrors, "$(playground)/$(taskName)/$(testName)/errs/", ParamType::path | ParamType::containVariables);
             StringRef(outputRunTime, "$(playground)/$(taskName)/$(testName)/time/", ParamType::path | ParamType::containVariables);
         } paramStruct = ParamStruct();
-        
+
         ParamUnion() { /*paramStruct = ParamStruct();*/ }
         ~ParamUnion() {}
-    } paramHolder = ParamUnion();
-    
+    } paramHolder;
+
     bool recompile = false;
     vector<Task*> tasks;
 

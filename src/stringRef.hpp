@@ -33,8 +33,8 @@ struct stringRef
     }
 
     stringRef (const char * key, const char * value, Flags flags) {
-        this->key = string(key);
-        this->value = string(value);
+        this->key = key;
+        this->value = value;
         this->flags = flags;
         cout << "lolik2 " << key << " omg " << this->key << endl;
     }
