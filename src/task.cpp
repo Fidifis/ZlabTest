@@ -41,15 +41,20 @@ Task::Task(const char path[], const char configPath[] = "")
         cerr << "config file not found" << endl;
     }
 
+cout << "tady lol" << endl;
+//cout << param.taskName.key << endl;
+//cout << "turutu" << endl;
+
     //Fill class atributes with values from json
     if (js.contains(param.taskName.key))
-        param.taskName = js[param.taskName.key];
+        param.taskName.value = js[param.taskName.key];
 
     if (haveConf)
         loadParameters(conf);
 
     if (js.contains("shared"))
     {
+        cout << "tady 2 lulw" << endl;
         const json &shared = js["shared"];
         loadParameters(shared);
     }
@@ -71,7 +76,7 @@ Task::Task(const char path[], const char configPath[] = "")
 Task::Task(const Task *task, const string &testName, const json &js)
 {
     copy(task);
-    param.testName = testName;
+    param.testName.value = testName;
 
     loadParameters(js);
     substituteAllNames();
@@ -104,15 +109,15 @@ void Task::loadParameters(const json &js)
             if (param.compileArgs.value == _compileArgs)
             {
                 recompile = true;
-                param.compileArgs = _compileArgs;
+                param.compileArgs.value = _compileArgs;
             }
         }
         else if (js.contains(item.key))
         {
-            item = js[item.key];
+            item.value = js[item.key];
             if (item.flags & ParamType::path)
             {
-                addSlashOnEnd(item);
+                addSlashOnEnd(item.value);
             }
         }
     }
@@ -134,7 +139,7 @@ void Task::substituteAllNames() {
         for (auto &item : paramArray)
         {
             if (item.flags & ParamType::containVariables &&
-                substituteNames(item))
+                substituteNames(item.value))
             {
                 changed = true;
             }
@@ -153,7 +158,7 @@ bool Task::substituteNames(string &arg)
         {
             if (name == item.key)
             {
-                substitute(arg, item, start, length);
+                substitute(arg, item.value, start, length);
                 return true;
             }
         }

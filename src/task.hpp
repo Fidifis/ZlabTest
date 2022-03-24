@@ -4,6 +4,8 @@
 #include "compile.hpp"
 #include "stringRef.hpp"
 
+#define param paramHolder.paramStruct
+#define paramArray paramHolder.paramArray_
 #define TASK_NUMBER_OF_PARAMETERS 12
 
 class Task
@@ -12,15 +14,16 @@ private:
     enum class ParamType {
         path = 1, containVariables = 2, specialLoad = 4
     };
-    
+
     inline friend Flags operator| (ParamType p1, ParamType p2)
     { return (Flags)p1 | (Flags)p2; }
     inline friend Flags operator& (Flags p1, ParamType p2)
     { return p1 & (Flags)p2; }
 
-    union
+    union ParamUnion
     {
-        struct {
+        array<stringRef, TASK_NUMBER_OF_PARAMETERS> paramArray_;
+        struct ParamStruct {
             StringRef(taskName, "unnamed", 0);
             StringRef(testName, "global", 0);
             StringRef(maxTime, "3", 0);
@@ -34,10 +37,11 @@ private:
             StringRef(compileErrorsFile, "$(playground)/$(taskName)/out.err", (Flags)ParamType::containVariables);
             StringRef(outputErrors, "$(playground)/$(taskName)/$(testName)/errs/", ParamType::path | ParamType::containVariables);
             StringRef(outputRunTime, "$(playground)/$(taskName)/$(testName)/time/", ParamType::path | ParamType::containVariables);
-        } param;
-
-        array<stringRef, TASK_NUMBER_OF_PARAMETERS> paramArray;
-    };
+        } paramStruct = ParamStruct();
+        
+        ParamUnion() { /*paramStruct = ParamStruct();*/ }
+        ~ParamUnion() {}
+    } paramHolder = ParamUnion();
     
     bool recompile = false;
     vector<Task*> tasks;
@@ -61,18 +65,18 @@ public:
 
     bool getRecompile() const { return recompile; }
 
-    const string& getTaskName() const { return param.taskName; }
-    const string& getTestName() const { return param.testName; }
-    const string& getMaxTime() const { return param.maxTime; }
-    const string& getCompileArgs() const { return param.compileArgs; }
-    const string& getInputData() const { return param.inputData; }
-    const string& getReferenceData() const { return param.referenceData; }
-    const string& getPlayground() const { return param.playground; }
-    const string& getOutputData() const { return param.outputData; }
-    const string& getCompiledBinaryFile() const { return param.compiledBinaryFile; }
-    const string& getCompileErrorsFile() const { return param.compileErrorsFile; }
-    const string& getOutputErrors() const { return param.outputErrors; }
-    const string& getOutputRunTime() const { return param.outputRunTime; }
+    const string& getTaskName() const { return param.taskName.value; }
+    const string& getTestName() const { return param.testName.value; }
+    const string& getMaxTime() const { return param.maxTime.value; }
+    const string& getCompileArgs() const { return param.compileArgs.value; }
+    const string& getInputData() const { return param.inputData.value; }
+    const string& getReferenceData() const { return param.referenceData.value; }
+    const string& getPlayground() const { return param.playground.value; }
+    const string& getOutputData() const { return param.outputData.value; }
+    const string& getCompiledBinaryFile() const { return param.compiledBinaryFile.value; }
+    const string& getCompileErrorsFile() const { return param.compileErrorsFile.value; }
+    const string& getOutputErrors() const { return param.outputErrors.value; }
+    const string& getOutputRunTime() const { return param.outputRunTime.value; }
 };
 
 /*
