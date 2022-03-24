@@ -39,8 +39,8 @@ private:
             StringRef(outputRunTime, "$(playground)/$(taskName)/$(testName)/time/", ParamType::path | ParamType::containVariables);
         } paramStruct = ParamStruct();
 
-        ParamUnion() { /*paramStruct = ParamStruct();*/ }
-        ~ParamUnion() {}
+        ParamUnion() { }
+        ~ParamUnion() { paramStruct.~ParamStruct(); } //bez tohoto řádku dojde k memory leaku
     } paramHolder;
 
     bool recompile = false;
