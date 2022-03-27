@@ -42,8 +42,8 @@ Task::Task(const char path[], const char configPath[] = "")
     }
 
     //Fill class atributes with values from json
-    if (js.contains(param.taskName.key))
-        param.taskName = js[param.taskName.key];
+    if (js.contains(PARAM.taskName.key))
+        PARAM.taskName = js[PARAM.taskName.key];
 
     if (haveConf)
         loadParameters(conf);
@@ -57,7 +57,7 @@ Task::Task(const char path[], const char configPath[] = "")
     for (const auto &item : js.items())
     {
         if (item.key().compare("shared") != 0 &&
-            item.key().compare(param.taskName.key) != 0)
+            item.key().compare(PARAM.taskName.key) != 0)
         {
             const json &testJS = item.value();
             Task *testTask = new Task(this, item.key(), testJS);
@@ -69,7 +69,7 @@ Task::Task(const char path[], const char configPath[] = "")
 Task::Task(const Task *task, const string &testName, const json &js)
 {
     copy(task);
-    param.testName = testName;
+    PARAM.testName = testName;
     loadParameters(js);
     substituteAllNames();
 }
@@ -84,25 +84,25 @@ Task::~Task()
 
 void Task::copy(const Task *task)
 {
-    for (size_t i = 0; i < paramArray.size(); ++i)
+    for (size_t i = 0; i < PARAM_ARRAY.size(); ++i)
     {
-        paramArray[i] = task->paramArray[i];
+        PARAM_ARRAY[i] = task->PARAM_ARRAY[i];
     }
 }
 
 void Task::loadParameters(const json &js)
 {
-    for (auto &item : paramArray)
+    for (auto &item : PARAM_ARRAY)
     {
         if (js.contains(item.key)) {
             if (item.flags & ParamType::specialLoad &&
-                item.key == param.compileArgs.key)
+                item.key == PARAM.compileArgs.key)
             {
-                const string &_compileArgs = js[param.compileArgs.key];
-                if (param.compileArgs.value == _compileArgs)
+                const string &_compileArgs = js[PARAM.compileArgs.key];
+                if (PARAM.compileArgs.value == _compileArgs)
                 {
                     recompile = true;
-                    param.compileArgs = _compileArgs;
+                    PARAM.compileArgs = _compileArgs;
                 }
             }
             else
@@ -130,7 +130,7 @@ void Task::substituteAllNames() {
             break;
         }
 
-        for (auto &item : paramArray)
+        for (auto &item : PARAM_ARRAY)
         {
             if (item.flags & ParamType::containVariables &&
                 substituteNames(item))
@@ -148,7 +148,7 @@ bool Task::substituteNames(string &arg)
 
     if (getSubstVarName(arg, name, start, length))
     {
-        for (auto &item : paramArray)
+        for (auto &item : PARAM_ARRAY)
         {
             if (name == item.key)
             {

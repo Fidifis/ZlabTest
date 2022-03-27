@@ -3,8 +3,8 @@
 #include "stringSubstitution.hpp"
 #include "stringRef.hpp"
 
-#define param paramHolder.paramStruct
-#define paramArray paramHolder.paramArray_
+#define PARAM paramHolder.paramStruct
+#define PARAM_ARRAY paramHolder.paramArray
 #define TASK_NUMBER_OF_PARAMETERS 12
 
 class Task
@@ -21,7 +21,7 @@ private:
 
     union ParamUnion
     {
-        array<stringRef, TASK_NUMBER_OF_PARAMETERS> paramArray_;
+        array<stringRef, TASK_NUMBER_OF_PARAMETERS> paramArray;
         struct ParamStruct {
             StringRef(taskName, "unnamed", 0);
             StringRef(testName, "global", 0);
@@ -64,16 +64,16 @@ public:
 
     bool getRecompile() const { return recompile; }
 
-    const string& getTaskName() const { return param.taskName.value; }
-    const string& getTestName() const { return param.testName.value; }
-    const string& getMaxTime() const { return param.maxTime.value; }
-    const string& getCompileArgs() const { return param.compileArgs.value; }
-    const string& getInputData() const { return param.inputData.value; }
-    const string& getReferenceData() const { return param.referenceData.value; }
-    const string& getPlayground() const { return param.playground.value; }
-    const string& getOutputData() const { return param.outputData.value; }
-    const string& getCompiledBinaryFile() const { return param.compiledBinaryFile.value; }
-    const string& getCompileErrorsFile() const { return param.compileErrorsFile.value; }
-    const string& getOutputErrors() const { return param.outputErrors.value; }
-    const string& getOutputRunTime() const { return param.outputRunTime.value; }
+    const string& getTaskName() const { return PARAM.taskName.value; }
+    const string& getTestName() const { return PARAM.testName.value; }
+    const string& getMaxTime() const { return PARAM.maxTime.value; }
+    const string& getCompileArgs() const { return PARAM.compileArgs.value; }
+    const string& getInputData() const { return PARAM.inputData.value; }
+    const string& getReferenceData() const { return PARAM.referenceData.value; }
+    const string& getPlayground() const { return PARAM.playground.value; }
+    const string& getOutputData() const { return PARAM.outputData.value; }
+    const string& getCompiledBinaryFile() const { return PARAM.compiledBinaryFile.value; }
+    const string& getCompileErrorsFile() const { return PARAM.compileErrorsFile.value; }
+    const string& getOutputErrors() const { return PARAM.outputErrors.value; }
+    const string& getOutputRunTime() const { return PARAM.outputRunTime.value; }
 };
