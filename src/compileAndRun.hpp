@@ -2,10 +2,10 @@
 #include "headers.hpp"
 #include "task.hpp"
 
-enum class Result {success, warrings, fail};
+enum class CompileResult {success, warrings, fail};
 
-void runTests(const Task *task, const char sourceCodeFile[]);
-
-Result compile(const Task *task, const char sourceCodeFile[]);
+CompileResult compile(const Task *task, const char sourceCodeFile[]);
 
 void runProgram(const Task *task);
+
+void compileAndRun(const Task *task, const char sourceCodeFile[]);

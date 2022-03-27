@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 
     try
     {
-        runTests(task, csourceCode);
+        compileAndRun(task, csourceCode);
     }
     catch(const exception& e)
     {

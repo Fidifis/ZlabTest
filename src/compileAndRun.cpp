@@ -1,6 +1,6 @@
 #include "compileAndRun.hpp"
 
-Result compile(const Task *task, const char sourceCodeFile[])
+CompileResult compile(const Task *task, const char sourceCodeFile[])
 {
     if (sourceCodeFile[0] == '\0')
     {
@@ -39,24 +39,24 @@ Result compile(const Task *task, const char sourceCodeFile[])
             if (content.empty())
             {
                 cout << "Compiled successfully." << endl;
-                return Result::success;
+                return CompileResult::success;
             }
             else
             {
                 cout << "Compiled with warnings." << endl;
-                return Result::warrings;
+                return CompileResult::warrings;
             }
         }
         else
         {
             cout << "Compiled successfully." << endl;
-            return Result::success;
+            return CompileResult::success;
         }
     }
     else
     {
         cout << "Compilation failed." << endl;
-        return Result::fail;
+        return CompileResult::fail;
     }
 }
 
@@ -93,7 +93,7 @@ void runProgram(const Task *task)
     }
 }
 
-void runTests(const Task *task, const char sourceCodeFile[])
+void compileAndRun(const Task *task, const char sourceCodeFile[])
 {
     bool compiled = false;
     for (size_t i = 0; i < task->size(); ++i)
