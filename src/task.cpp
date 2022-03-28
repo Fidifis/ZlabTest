@@ -1,13 +1,13 @@
 #include "task.hpp"
 
-Task::Task(const json& taskJson, const json& globalConfig)
+Task::Task(const json& taskJson, const json* globalConfig)
 {
     //Fill class atributes with values from json
     if (taskJson.contains(PARAM.taskName.key))
         PARAM.taskName = taskJson[PARAM.taskName.key];
 
-    if (/*haveConf*/ false)
-        loadParameters(globalConfig);
+    if (globalConfig != nullptr)
+        loadParameters(*globalConfig);
 
     if (taskJson.contains(PARAMETER_SHARED_STR))
     {

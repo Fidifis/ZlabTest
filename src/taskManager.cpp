@@ -39,7 +39,7 @@ TaskManager::TaskManager(const char path[], const char configPath[])
         cerr << "config file not found" << endl;
     }
 
-    globalTaskConfig = new Task(js, conf);
+    globalTaskConfig = new Task(js, haveConf ? &conf : nullptr);
 
     //make TaskTests
     for (const auto &item : js.items())

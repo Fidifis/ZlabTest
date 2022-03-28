@@ -62,7 +62,7 @@ protected:
     virtual void SpecialLoad(stringRef& item, const string& jsonValue);
 
 public:
-    Task(const json& taskJson, const json& globalConfig);
+    Task(const json& taskJson, const json* globalConfig);
     virtual ~Task() { }
 
     inline const string& getTaskName() const { return PARAM.taskName.value; }
