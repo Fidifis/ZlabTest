@@ -1,5 +1,5 @@
 #include "headers.hpp"
-#include "task.hpp"
+#include "taskManager.hpp"
 #include "compileAndRun.hpp"
 
 const char CONFIG_FILE_NAME[] = "config.json";
@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    Task *task = new Task(ctask, cconfig);
+    TaskManager *task = new TaskManager(ctask, cconfig);
 
     try
     {

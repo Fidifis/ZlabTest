@@ -11,5 +11,6 @@
 #include "json.hpp"
 
 using namespace std;
+using nlohmann::json;
 
 #endif //HEADERS_HPP

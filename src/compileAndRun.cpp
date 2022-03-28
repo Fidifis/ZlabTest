@@ -93,7 +93,7 @@ void runProgram(const TaskTest *task)
     }
 }
 
-void compileAndRun(const Task *task, const char sourceCodeFile[])
+void compileAndRun(const TaskManager *task, const char sourceCodeFile[])
 {
     bool compiled = false;
     for (size_t i = 0; i < task->size(); ++i)

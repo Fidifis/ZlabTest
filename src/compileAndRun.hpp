@@ -1,6 +1,7 @@
 #pragma once
 #include "headers.hpp"
-#include "task.hpp"
+#include "taskManager.hpp"
+#include "taskTest.hpp"
 
 enum class CompileResult {success, warrings, fail};
 
@@ -8,4 +9,4 @@ CompileResult compile(const TaskTest *task, const char sourceCodeFile[]);
 
 void runProgram(const TaskTest *task);
 
-void compileAndRun(const Task *task, const char sourceCodeFile[]);
+void compileAndRun(const TaskManager *task, const char sourceCodeFile[]);

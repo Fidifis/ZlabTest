@@ -11,7 +11,6 @@ private:
 
 public:
     TaskTest(const Task *task, const string &testName, const nlohmann::json &js);
-    ~TaskTest() override { }
 
-    bool getRecompile() const { return recompile; }
+    inline bool getRecompile() const { return recompile; }
 };

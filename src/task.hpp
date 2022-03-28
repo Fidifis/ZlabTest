@@ -3,11 +3,17 @@
 #include "stringSubstitution.hpp"
 #include "stringRef.hpp"
 
+//----------keep this updated---------------
+#define TASK_NUMBER_OF_PARAMETERS 12
+#define PARAMETER_TASK_NAME_SYMBOL taskName
+#define PARAMETER_SHARED_SYMBOL shared
+//------------------------------------------
+
 #define PARAM paramHolder.paramStruct
 #define PARAM_ARRAY paramHolder.paramArray
-#define TASK_NUMBER_OF_PARAMETERS 12
-
-class TaskTest;
+#define MAKE_STR(x) #x
+#define PARAMETER_TASK_NAME_STR MAKE_STR(PARAMETER_TASK_NAME_SYMBOL)
+#define PARAMETER_SHARED_STR MAKE_STR(PARAMETER_SHARED_SYMBOL)
 
 class Task
 {
@@ -25,7 +31,7 @@ protected:
     {
         array<stringRef, TASK_NUMBER_OF_PARAMETERS> paramArray;
         struct ParamStruct {
-            StringRef(taskName, "unnamed", 0);
+            StringRef(PARAMETER_TASK_NAME_SYMBOL, "unnamed", 0);
             StringRef(testName, "global", 0);
             StringRef(maxTime, "3", 0);
             StringRef(compileArgs, "-Wall -pedantic", (Flags)ParamType::specialLoad);
@@ -56,28 +62,20 @@ protected:
 
     virtual void SpecialLoad(stringRef& item, const string& jsonValue);
 
-private:
-    vector<TaskTest*> tasks;
-    
 public:
-    Task(const char path[], const char configPath[]);
-    virtual ~Task();
+    Task(const json& taskJson, const json& globalConfig);
+    virtual ~Task() { }
 
-    const TaskTest* operator[] (int index) const { return tasks[index]; }
-    size_t size() const { return tasks.size(); }
-
-    const string& getTaskName() const { return PARAM.taskName.value; }
-    const string& getTestName() const { return PARAM.testName.value; }
-    const string& getMaxTime() const { return PARAM.maxTime.value; }
-    const string& getCompileArgs() const { return PARAM.compileArgs.value; }
-    const string& getInputData() const { return PARAM.inputData.value; }
-    const string& getReferenceData() const { return PARAM.referenceData.value; }
-    const string& getPlayground() const { return PARAM.playground.value; }
-    const string& getOutputData() const { return PARAM.outputData.value; }
-    const string& getCompiledBinaryFile() const { return PARAM.compiledBinaryFile.value; }
-    const string& getCompileErrorsFile() const { return PARAM.compileErrorsFile.value; }
-    const string& getOutputErrors() const { return PARAM.outputErrors.value; }
-    const string& getOutputRunTime() const { return PARAM.outputRunTime.value; }
+    inline const string& getTaskName() const { return PARAM.taskName.value; }
+    inline const string& getTestName() const { return PARAM.testName.value; }
+    inline const string& getMaxTime() const { return PARAM.maxTime.value; }
+    inline const string& getCompileArgs() const { return PARAM.compileArgs.value; }
+    inline const string& getInputData() const { return PARAM.inputData.value; }
+    inline const string& getReferenceData() const { return PARAM.referenceData.value; }
+    inline const string& getPlayground() const { return PARAM.playground.value; }
+    inline const string& getOutputData() const { return PARAM.outputData.value; }
+    inline const string& getCompiledBinaryFile() const { return PARAM.compiledBinaryFile.value; }
+    inline const string& getCompileErrorsFile() const { return PARAM.compileErrorsFile.value; }
+    inline const string& getOutputErrors() const { return PARAM.outputErrors.value; }
+    inline const string& getOutputRunTime() const { return PARAM.outputRunTime.value; }
 };
-
-#include "taskTest.hpp"

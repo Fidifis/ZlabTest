@@ -1,76 +1,18 @@
 #include "task.hpp"
 
-using namespace nlohmann;
-
-Task::Task(const char path[], const char configPath[] = "")
+Task::Task(const json& taskJson, const json& globalConfig)
 {
-    json js, conf;
-    bool haveConf = false;
-
-    //load task json file
-    if (filesystem::exists(path) &&
-        !filesystem::is_directory(path))
-    {
-        cout << "loading given json file " << endl;
-        ifstream stream(path);
-        stream >> js;
-        stream.close();
-    }
-    else
-    {
-        cerr << "failed load task json file." << endl;
-        return;
-    }
-
-    //load config json file
-    if (configPath[0] == '\0')
-    {
-        cout << "no config file specified" << endl;
-    }
-    else if (filesystem::exists(configPath) &&
-        !filesystem::is_directory(configPath))
-    {
-        cout << "loading general configuration from config file" << endl;
-        ifstream confStream(configPath);
-        confStream >> conf;
-        confStream.close();
-        haveConf = true;
-    }
-    else
-    {
-        cerr << "config file not found" << endl;
-    }
-
     //Fill class atributes with values from json
-    if (js.contains(PARAM.taskName.key))
-        PARAM.taskName = js[PARAM.taskName.key];
+    if (taskJson.contains(PARAM.taskName.key))
+        PARAM.taskName = taskJson[PARAM.taskName.key];
 
-    if (haveConf)
-        loadParameters(conf);
+    if (/*haveConf*/ false)
+        loadParameters(globalConfig);
 
-    if (js.contains("shared"))
+    if (taskJson.contains(PARAMETER_SHARED_STR))
     {
-        const json &shared = js["shared"];
+        const json &shared = taskJson[PARAMETER_SHARED_STR];
         loadParameters(shared);
-    }
-
-    for (const auto &item : js.items())
-    {
-        if (item.key().compare("shared") != 0 &&
-            item.key().compare(PARAM.taskName.key) != 0)
-        {
-            const json &testJS = item.value();
-            TaskTest *testTask = new TaskTest(this, item.key(), testJS);
-            tasks.push_back(testTask);
-        }
-    }
-}
-
-Task::~Task()
-{
-    for (TaskTest *t : tasks)
-    {
-        delete t;
     }
 }
 
