@@ -4,8 +4,8 @@
 
 enum class CompileResult {success, warrings, fail};
 
-CompileResult compile(const Task *task, const char sourceCodeFile[]);
+CompileResult compile(const TaskTest *task, const char sourceCodeFile[]);
 
-void runProgram(const Task *task);
+void runProgram(const TaskTest *task);
 
 void compileAndRun(const Task *task, const char sourceCodeFile[]);

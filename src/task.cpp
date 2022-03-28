@@ -60,23 +60,15 @@ Task::Task(const char path[], const char configPath[] = "")
             item.key().compare(PARAM.taskName.key) != 0)
         {
             const json &testJS = item.value();
-            Task *testTask = new Task(this, item.key(), testJS);
+            TaskTest *testTask = new TaskTest(this, item.key(), testJS);
             tasks.push_back(testTask);
         }
     }
 }
 
-Task::Task(const Task *task, const string &testName, const json &js)
-{
-    copy(task);
-    PARAM.testName = testName;
-    loadParameters(js);
-    substituteAllNames();
-}
-
 Task::~Task()
 {
-    for (Task *t : tasks)
+    for (TaskTest *t : tasks)
     {
         delete t;
     }
@@ -95,26 +87,25 @@ void Task::loadParameters(const json &js)
     for (auto &item : PARAM_ARRAY)
     {
         if (js.contains(item.key)) {
-            if (item.flags & ParamType::specialLoad &&
-                item.key == PARAM.compileArgs.key)
+            if (item.flags & ParamType::specialLoad)
             {
-                const string &_compileArgs = js[PARAM.compileArgs.key];
-                if (PARAM.compileArgs.value == _compileArgs)
-                {
-                    recompile = true;
-                    PARAM.compileArgs = _compileArgs;
-                }
+                SpecialLoad(item, js[item.key]);
             }
             else
             {
                 item = js[item.key];
-                if (item.flags & ParamType::path)
-                {
-                    addSlashOnEnd(item);
-                }
+            }
+
+            if (item.flags & ParamType::path)
+            {
+                addSlashOnEnd(item);
             }
         }
     }
+}
+
+void Task::SpecialLoad(stringRef& item, const string& jsonValue) {
+    item = jsonValue;
 }
 
 void Task::substituteAllNames() {

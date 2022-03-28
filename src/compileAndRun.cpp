@@ -1,6 +1,6 @@
 #include "compileAndRun.hpp"
 
-CompileResult compile(const Task *task, const char sourceCodeFile[])
+CompileResult compile(const TaskTest *task, const char sourceCodeFile[])
 {
     if (sourceCodeFile[0] == '\0')
     {
@@ -60,7 +60,7 @@ CompileResult compile(const Task *task, const char sourceCodeFile[])
     }
 }
 
-void runProgram(const Task *task)
+void runProgram(const TaskTest *task)
 {
     const string &inputData = task->getInputData();
     if (!filesystem::exists(inputData))
@@ -98,7 +98,7 @@ void compileAndRun(const Task *task, const char sourceCodeFile[])
     bool compiled = false;
     for (size_t i = 0; i < task->size(); ++i)
     {
-        const Task *t = (*task)[i];
+        const TaskTest *t = (*task)[i];
         compiled = !t->getRecompile() && compiled;
         if (!compiled)
             compile(t, sourceCodeFile);

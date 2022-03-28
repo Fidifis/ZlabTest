@@ -7,9 +7,11 @@
 #define PARAM_ARRAY paramHolder.paramArray
 #define TASK_NUMBER_OF_PARAMETERS 12
 
+class TaskTest;
+
 class Task
 {
-private:
+protected:
     enum class ParamType {
         path = 1, containVariables = 2, specialLoad = 4
     };
@@ -42,27 +44,27 @@ private:
         ~ParamUnion() { paramStruct.~ParamStruct(); } //bez tohoto řádku dojde k memory leaku
     } paramHolder;
 
-    bool recompile = false;
-    vector<Task*> tasks;
+    Task() { }
 
-    Task(const Task *task, const string &testName, const nlohmann::json &js);
-
-    inline void copy(const Task *task);
+    void copy(const Task *task);
     void loadParameters(const nlohmann::json &js);
 
     void substituteAllNames();
     bool substituteNames(string &arg);
 
     inline void addSlashOnEnd(string &arg);
+
+    virtual void SpecialLoad(stringRef& item, const string& jsonValue);
+
+private:
+    vector<TaskTest*> tasks;
     
 public:
     Task(const char path[], const char configPath[]);
-    ~Task();
+    virtual ~Task();
 
-    const Task* operator[] (int index) const { return tasks[index]; }
+    const TaskTest* operator[] (int index) const { return tasks[index]; }
     size_t size() const { return tasks.size(); }
-
-    bool getRecompile() const { return recompile; }
 
     const string& getTaskName() const { return PARAM.taskName.value; }
     const string& getTestName() const { return PARAM.testName.value; }
@@ -77,3 +79,5 @@ public:
     const string& getOutputErrors() const { return PARAM.outputErrors.value; }
     const string& getOutputRunTime() const { return PARAM.outputRunTime.value; }
 };
+
+#include "taskTest.hpp"
