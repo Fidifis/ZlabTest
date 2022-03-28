@@ -1,7 +1,9 @@
 #pragma once
 #include "headers.hpp"
 
-#define StringRef(name, value, flags) stringRef name { #name, value, flags }
+#define X_MAKE_STR(x) #x
+#define MAKE_STR(x) X_MAKE_STR(x)
+#define StringRef(name, value, flags) stringRef name { MAKE_STR(name), value, flags }
 
 typedef unsigned int Flags;
 

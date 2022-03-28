@@ -41,9 +41,6 @@ TaskManager::TaskManager(const char path[], const char configPath[])
 
     globalTaskConfig = new Task(js, conf);
 
-    assert(strcmp(PARAMETER_TASK_NAME_STR, "taskName") == 0);
-    assert(strcmp(PARAMETER_SHARED_STR, "shared") == 0);
-
     //make TaskTests
     for (const auto &item : js.items())
     {

@@ -11,7 +11,6 @@
 
 #define PARAM paramHolder.paramStruct
 #define PARAM_ARRAY paramHolder.paramArray
-#define MAKE_STR(x) #x
 #define PARAMETER_TASK_NAME_STR MAKE_STR(PARAMETER_TASK_NAME_SYMBOL)
 #define PARAMETER_SHARED_STR MAKE_STR(PARAMETER_SHARED_SYMBOL)
 
