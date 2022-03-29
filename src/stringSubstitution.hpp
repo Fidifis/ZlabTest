@@ -1,15 +1,15 @@
 #pragma once
 #include "headers.hpp"
 
-const char __startToken[] = "$(";
-const char __endToken[] = ")";
+const char START_TOKEN[] = "$(";
+const char END_TOKEN[] = ")";
 
-inline bool __findPosition(const string &text, size_t &startPos, size_t &length)
+static inline bool findPosition(const string &text, size_t &startPos, size_t &length)
 {
-    startPos = text.find(__startToken, 0);
+    startPos = text.find(START_TOKEN, 0);
     if (startPos != string::npos)
     {
-        length = text.find(__endToken, startPos) - startPos + 1;
+        length = text.find(END_TOKEN, startPos) - startPos + 1;
         if (length != string::npos)
             return true;
     }
@@ -18,7 +18,7 @@ inline bool __findPosition(const string &text, size_t &startPos, size_t &length)
 
 inline bool getSubstVarName(const string &text, string &name, size_t &startPosition, size_t &length)
 {
-    if (__findPosition(text, startPosition, length))
+    if (findPosition(text, startPosition, length))
     {
         name = text.substr(startPosition + 2, length - 3);
         return true;
