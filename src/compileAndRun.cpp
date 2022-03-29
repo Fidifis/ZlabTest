@@ -60,7 +60,7 @@ CompileResult compile(const TaskTest *task, const char sourceCodeFile[])
     }
 }
 
-void runProgram(const TaskTest *task)
+vector<ExitCode> runProgram(const TaskTest *task)
 {
     const string &inputData = task->getInputData();
     if (!filesystem::exists(inputData))
@@ -73,6 +73,8 @@ void runProgram(const TaskTest *task)
     }
 
     cout << "Executing program with inputs from: " << inputData << endl;
+
+    vector<ExitCode> exitCodes;
 
     for (auto &file : filesystem::directory_iterator(inputData)) {
         if (!file.exists() || file.is_directory())
@@ -89,8 +91,15 @@ void runProgram(const TaskTest *task)
             "' > '" + task->getOutputData() + filename + "_out" +
             "' 2> '"+ task->getOutputErrors() + filename + "_err" +
             "' ) 2> '" + task->getOutputRunTime() + filename + "_time'";
-        system(cmd.c_str());
+        const int exitCode = system(cmd.c_str());
+
+        if (exitCode > MAX_EXPECTED_CODE)
+        {
+            exitCodes.push_back(exitCode);
+        }
     }
+
+    return exitCodes;
 }
 
 void compileAndRun(const TaskManager *task, const char sourceCodeFile[])
@@ -101,9 +110,15 @@ void compileAndRun(const TaskManager *task, const char sourceCodeFile[])
         const TaskTest *t = (*task)[i];
         compiled = !t->getRecompile() && compiled;
         if (!compiled)
-            compile(t, sourceCodeFile);
+        {
+            t->result->compileResult = compile(t, sourceCodeFile);
+        }
+        else
+        {
+            t->result->compileResult = CompileResult::none;
+        }
 
-        runProgram(t);
+        t->result->runExitCodes = runProgram(t);
         compiled = !t->getRecompile();
     }
 }

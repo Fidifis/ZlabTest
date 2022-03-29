@@ -30,6 +30,7 @@ protected:
     {
         array<stringRef, TASK_NUMBER_OF_PARAMETERS> paramArray;
         struct ParamStruct {
+            
             StringRef(PARAMETER_TASK_NAME_SYMBOL, "unnamed", (Flags)ParamType::manualLoad);
             StringRef(testName, "global", (Flags)ParamType::manualLoad);
             StringRef(maxTime, "3", 0);

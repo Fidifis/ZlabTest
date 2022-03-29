@@ -2,11 +2,11 @@
 #include "headers.hpp"
 #include "taskManager.hpp"
 #include "taskTest.hpp"
-
-enum class CompileResult {success, warrings, fail};
+#include "result.hpp"
+#include "exitCodes.hpp"
 
 CompileResult compile(const TaskTest *task, const char sourceCodeFile[]);
 
-void runProgram(const TaskTest *task);
+vector<ExitCode> runProgram(const TaskTest *task);
 
 void compileAndRun(const TaskManager *task, const char sourceCodeFile[]);

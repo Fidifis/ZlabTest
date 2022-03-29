@@ -16,5 +16,5 @@ public:
     inline const TaskTest* operator[] (int index) const { return tasks[index]; }
     inline size_t size() const { return tasks.size(); }
 
-    inline const Task * getGlobalTaskConfig() { return globalTaskConfig; }
+    inline const Task * getGlobalTaskConfig() const { return globalTaskConfig; }
 };

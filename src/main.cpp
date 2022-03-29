@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    TaskManager *task = new TaskManager(ctask, cconfig);
+    const TaskManager *task = new TaskManager(ctask, cconfig);
 
     try
     {

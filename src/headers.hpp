@@ -8,6 +8,7 @@
 #include <fstream>
 #include <vector>
 #include <array>
+#include <map>
 #include "json.hpp"
 
 using namespace std;
