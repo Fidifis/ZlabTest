@@ -18,7 +18,7 @@ class Task
 {
 protected:
     enum class ParamType {
-        path = 1, containVariables = 2, specialLoad = 4
+        path = 1, containVariables = 2, specialLoad = 4, manualLoad = 8
     };
 
     inline friend Flags operator| (ParamType p1, ParamType p2)
@@ -30,8 +30,8 @@ protected:
     {
         array<stringRef, TASK_NUMBER_OF_PARAMETERS> paramArray;
         struct ParamStruct {
-            StringRef(PARAMETER_TASK_NAME_SYMBOL, "unnamed", 0);
-            StringRef(testName, "global", 0);
+            StringRef(PARAMETER_TASK_NAME_SYMBOL, "unnamed", (Flags)ParamType::manualLoad);
+            StringRef(testName, "global", (Flags)ParamType::manualLoad);
             StringRef(maxTime, "3", 0);
             StringRef(compileArgs, "-Wall -pedantic", (Flags)ParamType::specialLoad);
 

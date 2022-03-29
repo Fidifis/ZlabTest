@@ -9,6 +9,8 @@ TaskTest::TaskTest(const Task *task, const string &testName, const nlohmann::jso
 }
 
 void TaskTest::SpecialLoad(stringRef& item, const string& jsonValue) {
+    Task::SpecialLoad(item, jsonValue);
+
     if (item.key == PARAM.compileArgs.key)
     {
         if (PARAM.compileArgs.value != jsonValue)

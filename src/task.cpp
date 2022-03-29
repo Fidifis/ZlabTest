@@ -28,16 +28,19 @@ void Task::loadParameters(const json &js)
 {
     for (auto &item : PARAM_ARRAY)
     {
-        if (js.contains(item.key)) {
-            if (item.flags & ParamType::specialLoad)
+        if (js.contains(item.key))
+        {
+            if (!(item.flags & ParamType::manualLoad))
             {
-                SpecialLoad(item, js[item.key]);
+                if (item.flags & ParamType::specialLoad)
+                {
+                    SpecialLoad(item, js[item.key]);
+                }
+                else
+                {
+                    item = js[item.key];
+                }
             }
-            else
-            {
-                item = js[item.key];
-            }
-
             if (item.flags & ParamType::path)
             {
                 addSlashOnEnd(item);
