@@ -60,7 +60,7 @@ CompileResult compile(const TaskTest *task, const char sourceCodeFile[])
     }
 }
 
-vector<ExitCode> runProgram(const TaskTest *task)
+map<const string, ExitCode> runProgram(const TaskTest *task)
 {
     const string &inputData = task->getInputData();
     if (!filesystem::exists(inputData))
@@ -74,7 +74,7 @@ vector<ExitCode> runProgram(const TaskTest *task)
 
     cout << "Executing program with inputs from: " << inputData << endl;
 
-    vector<ExitCode> exitCodes;
+    map<const string, ExitCode> exitCodes;
 
     for (auto &file : filesystem::directory_iterator(inputData)) {
         if (!file.exists() || file.is_directory())
@@ -95,7 +95,7 @@ vector<ExitCode> runProgram(const TaskTest *task)
 
         if (exitCode > MAX_EXPECTED_CODE)
         {
-            exitCodes.push_back(exitCode);
+            exitCodes[filename] = exitCode;
         }
     }
 

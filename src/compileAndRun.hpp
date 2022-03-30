@@ -7,6 +7,6 @@
 
 CompileResult compile(const TaskTest *task, const char sourceCodeFile[]);
 
-vector<ExitCode> runProgram(const TaskTest *task);
+map<const string, ExitCode> runProgram(const TaskTest *task);
 
 void compileAndRun(const TaskManager *task, const char sourceCodeFile[]);
