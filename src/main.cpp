@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
     }
     catch(const exception& e)
     {
-        cerr << e.what() << endl;
+        cerr << "FATAL ERROR: " << endl << e.what() << endl;
     }
 
     delete task;

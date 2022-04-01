@@ -14,8 +14,16 @@ json Result::toJson() const
     {
         for (const auto& item : unexpectedExitCodes)
         {
-            js["unexpectedExitCodes"][item.first] =
-            item.second + " (" + EXIT_CODE_MAP.at(item.second) + ")";
+            string s;
+            if (EXIT_CODE_MAP.count(item.second))
+            {
+                s = to_string(item.second) + " (" + EXIT_CODE_MAP.at(item.second) + ")";
+            }
+            else
+            {
+                s = to_string(item.second);
+            }
+            js["unexpectedExitCodes"][item.first] = s;
         }
     }
     return js;
