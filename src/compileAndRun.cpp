@@ -118,7 +118,7 @@ void compileAndRun(const TaskManager *task, const char sourceCodeFile[])
             t->result->compileResult = CompileResult::none;
         }
 
-        t->result->runExitCodes = runProgram(t);
+        t->result->unexpectedExitCodes = runProgram(t);
         compiled = !t->getRecompile();
     }
 }

@@ -4,7 +4,7 @@
 #include "stringRef.hpp"
 
 //----------keep this updated---------------
-#define TASK_NUMBER_OF_PARAMETERS 12
+#define TASK_NUMBER_OF_PARAMETERS 13
 #define PARAMETER_TASK_NAME_SYMBOL taskName
 #define PARAMETER_SHARED_SYMBOL shared
 //------------------------------------------
@@ -44,6 +44,7 @@ protected:
             StringRef(compileErrorsFile, "$(playground)/$(taskName)/out.err", (Flags)ParamType::containVariables);
             StringRef(outputErrors, "$(playground)/$(taskName)/$(testName)/errs/", ParamType::path | ParamType::containVariables);
             StringRef(outputRunTime, "$(playground)/$(taskName)/$(testName)/time/", ParamType::path | ParamType::containVariables);
+            StringRef(resultFile, "$(playground)/$(taskName)/result.json", (Flags)ParamType::containVariables);
         } paramStruct = ParamStruct();
 
         ParamUnion() { }
@@ -78,4 +79,5 @@ public:
     inline const string& getCompileErrorsFile() const { return PARAM.compileErrorsFile.value; }
     inline const string& getOutputErrors() const { return PARAM.outputErrors.value; }
     inline const string& getOutputRunTime() const { return PARAM.outputRunTime.value; }
+    inline const string& getResultFile() const { return PARAM.resultFile.value; }
 };

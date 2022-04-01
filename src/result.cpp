@@ -1,17 +1,36 @@
 #include "result.hpp"
 
-void Result::save(const char *path) const
+json Result::toJson() const
 {
     json js;
-    ofstream outstream(path);
 
     js["compileResult"] = compileResultToString(compileResult);
-    for (const auto& item : runExitCodes)
+
+    if (unexpectedExitCodes.size() == 0)
     {
-        js["runExitCodes"][item.first] =
-        item.second + " (" + EXIT_CODE_MAP.at(item.second) + ")";
+        js["unexpectedExitCodes"] = "none";
+    }
+    else
+    {
+        for (const auto& item : unexpectedExitCodes)
+        {
+            js["unexpectedExitCodes"][item.first] =
+            item.second + " (" + EXIT_CODE_MAP.at(item.second) + ")";
+        }
+    }
+    return js;
+}
+
+void Result::saveResult(const vector<TaskTest*> &tasks, const string &path) {
+    cout << "Saving result file to: " << path << endl;
+    ofstream stream(path);
+    json js;
+
+    for (const TaskTest *test : tasks)
+    {
+        js[test->getTestName()] = test->result->toJson();
     }
 
-    outstream << js;
-    outstream.close();
+    stream << setw(4) << js;
+    stream.close();
 }

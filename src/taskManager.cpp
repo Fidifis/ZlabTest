@@ -62,3 +62,11 @@ TaskManager::~TaskManager()
         delete t;
     }
 }
+void TaskManager::saveResultFile() const {
+    if (tasks.size() == 0)
+    {
+        cerr << "no tests to save the result" << endl;
+        return;
+    }
+    Result::saveResult(tasks, tasks[0]->getResultFile());
+}

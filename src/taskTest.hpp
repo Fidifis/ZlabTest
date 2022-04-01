@@ -3,6 +3,8 @@
 #include "task.hpp"
 #include "result.hpp"
 
+class Result;
+
 class TaskTest : public Task
 {
 private:
