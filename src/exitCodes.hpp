@@ -5,7 +5,7 @@ typedef int ExitCode;
 
 #define MAX_EXPECTED_CODE 3
 
-const map<const ExitCode, const string> EXIT_CODE_MAP = {
+const map<const ExitCode, const string> EXIT_CODE_MAP {
     {0, "OK"},
     {1, "Error"},
     {2, "serious_problem"},

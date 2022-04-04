@@ -4,7 +4,7 @@
 #include "taskTest.hpp"
 #include "result.hpp"
 
-const char CONFIG_FILE_NAME[] = "config.json";
+constexpr char CONFIG_FILE_NAME[] = "config.json";
 
 class TaskManager
 {

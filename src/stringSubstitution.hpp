@@ -1,8 +1,8 @@
 #pragma once
 #include "headers.hpp"
 
-const char START_TOKEN[] = "$(";
-const char END_TOKEN[] = ")";
+constexpr char START_TOKEN[] = "$(";
+constexpr char END_TOKEN[] = ")";
 
 static inline bool findPosition(const string &text, size_t &startPos, size_t &length)
 {
