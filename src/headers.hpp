@@ -9,6 +9,7 @@
 #include <vector>
 #include <array>
 #include <map>
+#include <cstdint>
 #include "json.hpp"
 
 using namespace std;

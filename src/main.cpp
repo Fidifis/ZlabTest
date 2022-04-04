@@ -2,8 +2,6 @@
 #include "taskManager.hpp"
 #include "compileAndRun.hpp"
 
-const char CONFIG_FILE_NAME[] = "config.json";
-
 void clearFiles(const Task *task)
 {
     for (auto &file : filesystem::directory_iterator(task->getPlayground())) 
@@ -27,7 +25,7 @@ inline char getOption(char *argv)
 int main(int argc, char *argv[])
 {
     const char *csourceCode, *ctask,
-    *cconfig = CONFIG_FILE_NAME;
+    *cconfig = "";
 
     if (argc <= 2)
     {

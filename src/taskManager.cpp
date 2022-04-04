@@ -21,12 +21,25 @@ TaskManager::TaskManager(const char path[], const char configPath[])
     }
 
     //load config json file
+    
+    //this is to prevent calling the filesystem::exists() twice
+    uint8_t state = 0;
+
     if (configPath[0] == '\0')
     {
-        cout << "no config file specified" << endl;
+        if (filesystem::exists(CONFIG_FILE_NAME))
+        {
+            configPath = CONFIG_FILE_NAME;
+            state = 1;
+        }
+        else
+        {
+            cout << "no config file specified" << endl;
+            state = 2;
+        }
     }
-    else if (filesystem::exists(configPath) &&
-        !filesystem::is_directory(configPath))
+    if (state == 1 || (state == 0 && filesystem::exists(configPath) &&
+        !filesystem::is_directory(configPath)))
     {
         cout << "loading general configuration from config file" << endl;
         ifstream confStream(configPath);
