@@ -10,10 +10,10 @@ void clearFiles(const Task *task)
 
 void printHelp()
 {
-    cout << "usage: zlabtest [-c] [-t] <task.json> <source.cpp> [<config.json>]" << endl;
+    cout << "usage: zlabtest [-d] [-c <config.json>] [-s <scripts>] <task.json> <source.cpp>" << endl;
 }
 
-inline char getOption(char *argv)
+inline char getOption(const char *argv)
 {
     if (argv != nullptr && argv[0] == '-' && argv[1] != '\0' )
     {
@@ -22,30 +22,90 @@ inline char getOption(char *argv)
     else return '\0';
 }
 
+inline bool loadArguments(const int& argc, const char *const *const &argv,
+    const char *&csourceCode , const char *&ctask,
+    const char *&cconfig, const char *&cscripts)
+{
+    char option;
+    uint8_t noOptArgsCount = 0;
+
+    for (int i = 0; i < argc; ++i)
+    {
+        option = getOption(argv[i]);
+        switch (option)
+        {
+            case '\0':
+                switch(noOptArgsCount)
+                {
+                    case 0:
+                        ctask = argv[i];
+                    break;
+
+                    case 1:
+                        csourceCode = argv[i];
+                    break;
+
+                    default:
+                        cerr << "Too many arguments" << endl;
+                        return 1;
+                }
+                ++noOptArgsCount;
+            break;
+
+            case 'c':
+                if (i + 1 < argc && getOption(argv[i + 1]) == '\0')
+                {
+                    cconfig = argv[i + 1];
+                }
+                else
+                {
+                    cerr << "No argument for option " << option << endl;
+                    printHelp();
+                    return 1;
+                }
+            break;
+
+            case 's':
+                if (i + 1 < argc && getOption(argv[i + 1]) == '\0')
+                {
+                    cscripts = argv[i + 1];
+                }
+                else
+                {
+                    cerr << "No argument for option " << option << endl;
+                    printHelp();
+                    return 1;
+                }
+            break;
+
+            case 'd':
+                //clearFiles();
+            break;
+
+            default:
+                cerr << "Unknown option " << option << endl;
+                printHelp();
+                return 1;
+        }
+    }
+    return 0;
+}
+
 int main(int argc, char *argv[])
 {
-    const char *csourceCode, *ctask,
-    *cconfig = "";
+    const char *csourceCode = nullptr, *ctask = nullptr,
+    *cconfig = nullptr, *cscripts = nullptr;
 
-    if (argc <= 2)
+    bool returnVal =
+    loadArguments(argc, argv, csourceCode, ctask, cconfig, cscripts);
+
+    if (returnVal != 0)
+        return returnVal;
+
+    if (ctask == nullptr || csourceCode == nullptr)
     {
+        cerr << "You need to specify path to task and source code" << endl;
         printHelp();
-        return 1;
-    }
-    else if (argc == 3)
-    {
-        ctask = argv[1];
-        csourceCode = argv[2];
-    }
-    else if (argc == 4)
-    {
-        ctask = argv[1];
-        csourceCode = argv[2];
-        cconfig = argv[3];
-    }
-    else
-    {
-        cerr << "Too many arguments." << endl;
         return 1;
     }
 

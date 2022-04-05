@@ -25,7 +25,7 @@ TaskManager::TaskManager(const char path[], const char configPath[])
     //this is to prevent calling the filesystem::exists() twice
     uint8_t state = 0;
 
-    if (configPath[0] == '\0')
+    if (configPath != nullptr && configPath[0] == '\0')
     {
         if (filesystem::exists(CONFIG_FILE_NAME))
         {
