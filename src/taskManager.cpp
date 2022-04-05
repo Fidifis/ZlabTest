@@ -5,6 +5,9 @@ TaskManager::TaskManager(const char path[], const char configPath[])
     json js, conf;
     bool haveConf = false;
 
+    if (path == nullptr)
+        throw invalid_argument("task path is null");
+
     //load task json file
     if (filesystem::exists(path) &&
         !filesystem::is_directory(path))
@@ -25,7 +28,7 @@ TaskManager::TaskManager(const char path[], const char configPath[])
     //this is to prevent calling the filesystem::exists() twice
     uint8_t state = 0;
 
-    if (configPath != nullptr && configPath[0] == '\0')
+    if (configPath == nullptr || configPath[0] == '\0')
     {
         if (filesystem::exists(CONFIG_FILE_NAME))
         {

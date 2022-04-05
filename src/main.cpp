@@ -29,7 +29,7 @@ inline bool loadArguments(const int& argc, const char *const *const &argv,
     char option;
     uint8_t noOptArgsCount = 0;
 
-    for (int i = 0; i < argc; ++i)
+    for (int i = 1; i < argc; ++i)
     {
         option = getOption(argv[i]);
         switch (option)
@@ -56,6 +56,7 @@ inline bool loadArguments(const int& argc, const char *const *const &argv,
                 if (i + 1 < argc && getOption(argv[i + 1]) == '\0')
                 {
                     cconfig = argv[i + 1];
+                    ++i;
                 }
                 else
                 {
@@ -69,6 +70,7 @@ inline bool loadArguments(const int& argc, const char *const *const &argv,
                 if (i + 1 < argc && getOption(argv[i + 1]) == '\0')
                 {
                     cscripts = argv[i + 1];
+                    ++i;
                 }
                 else
                 {
