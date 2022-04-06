@@ -92,13 +92,13 @@ static map<const string, ExitCode> runProgram(const TaskTest *task, const string
             "' 2> '"+ task->getOutputErrors() + filename + "_err" +
             "' ) 2> '" + task->getOutputRunTime() + filename + "_time'";*/
 
-        const string cmd = script + ' ' +
+        const string cmd = "bash " + script + ' ' +
             task->getMaxTime() + ' ' +
             file.path().string() + ' ' +
             task->getCompiledBinaryFile() + ' ' +
             task->getOutputData() + filename + ' ' +
             task->getOutputErrors() + filename + ' ' +
-            task->getOutputRunTime() + filename + ' ';
+            task->getOutputRunTime() + filename;
 
         const int exitCode = system(cmd.c_str());
 
