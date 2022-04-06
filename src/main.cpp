@@ -115,12 +115,14 @@ int main(int argc, char *argv[])
 
     try
     {
-        compileAndRun(task, csourceCode);
+        compileAndRun(task, csourceCode, cscripts);
         task->saveResultFile();
     }
     catch(const exception& e)
     {
-        cerr << "FATAL ERROR: " << endl << e.what() << endl;
+        cerr << "\033[31m" <<
+        "FATAL ERROR: " << endl << e.what() <<
+        "\033[0m" << endl;
     }
 
     delete task;

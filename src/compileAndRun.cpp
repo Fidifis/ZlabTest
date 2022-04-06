@@ -1,6 +1,6 @@
 #include "compileAndRun.hpp"
 
-CompileResult compile(const TaskTest *task, const char sourceCodeFile[])
+static CompileResult compile(const TaskTest *task, const char sourceCodeFile[])
 {
     if (sourceCodeFile[0] == '\0')
     {
@@ -60,7 +60,7 @@ CompileResult compile(const TaskTest *task, const char sourceCodeFile[])
     }
 }
 
-map<const string, ExitCode> runProgram(const TaskTest *task)
+static map<const string, ExitCode> runProgram(const TaskTest *task, const string &script)
 {
     const string &inputData = task->getInputData();
     if (!filesystem::exists(inputData))
@@ -85,12 +85,21 @@ map<const string, ExitCode> runProgram(const TaskTest *task)
         cout << task->getTaskName() << ": " << task->getTestName() << ": " << filename << endl;
 
         //( time -f '%E' timeout --time-- cat '--file--' | '--bin--' > '--output--' 2> '--errors--' ) 2> '--timeFile--'
-        const string cmd = "( time -f '%E' timeout " + task->getMaxTime() +
+        /*const string cmd = "( time -f '%E' timeout " + task->getMaxTime() +
             " cat '" + file.path().string() +
             "' | '" + task->getCompiledBinaryFile() +
             "' > '" + task->getOutputData() + filename + "_out" +
             "' 2> '"+ task->getOutputErrors() + filename + "_err" +
-            "' ) 2> '" + task->getOutputRunTime() + filename + "_time'";
+            "' ) 2> '" + task->getOutputRunTime() + filename + "_time'";*/
+
+        const string cmd = script + ' ' +
+            task->getMaxTime() + ' ' +
+            file.path().string() + ' ' +
+            task->getCompiledBinaryFile() + ' ' +
+            task->getOutputData() + filename + ' ' +
+            task->getOutputErrors() + filename + ' ' +
+            task->getOutputRunTime() + filename + ' ';
+
         const int exitCode = system(cmd.c_str());
 
         if (exitCode > MAX_EXPECTED_CODE)
@@ -102,8 +111,22 @@ map<const string, ExitCode> runProgram(const TaskTest *task)
     return exitCodes;
 }
 
-void compileAndRun(const TaskManager *task, const char sourceCodeFile[])
+void compileAndRun(const TaskManager *task, const char *sourceCodeFile, const char *scriptsFolder)
 {
+    const char *scripts;
+    if (scriptsFolder == nullptr || scriptsFolder[0] == '\0')
+        scripts = SCRIPTS_FOLDER;
+    else
+        scripts = scriptsFolder;
+
+    string runProgramPath = scripts;
+    runProgramPath += SCRIPT_RUN_PROGRAM_NAME;
+
+    if (!filesystem::exists(runProgramPath) || filesystem::is_directory(runProgramPath))
+    {
+        throw invalid_argument("runProgram.bash doest exist. " + runProgramPath);
+    }
+
     bool compiled = false;
     for (size_t i = 0; i < task->size(); ++i)
     {
@@ -118,7 +141,7 @@ void compileAndRun(const TaskManager *task, const char sourceCodeFile[])
             t->result->compileResult = CompileResult::none;
         }
 
-        t->result->unexpectedExitCodes = runProgram(t);
+        t->result->unexpectedExitCodes = runProgram(t, runProgramPath);
         compiled = !t->getRecompile();
     }
 }

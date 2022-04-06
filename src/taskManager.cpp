@@ -12,14 +12,14 @@ TaskManager::TaskManager(const char path[], const char configPath[])
     if (filesystem::exists(path) &&
         !filesystem::is_directory(path))
     {
-        cout << "loading given json file " << endl;
+        cout << "loading given json file" << endl;
         ifstream stream(path);
         stream >> js;
         stream.close();
     }
     else
     {
-        cerr << "failed load task json file." << endl;
+        throw invalid_argument("failed load task json file");
         return;
     }
 
@@ -50,7 +50,7 @@ TaskManager::TaskManager(const char path[], const char configPath[])
         confStream.close();
         haveConf = true;
     }
-    else
+    else if (state != 2)
     {
         cerr << "config file not found" << endl;
     }

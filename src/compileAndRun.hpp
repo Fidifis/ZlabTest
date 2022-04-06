@@ -5,8 +5,7 @@
 #include "result.hpp"
 #include "exitCodes.hpp"
 
-CompileResult compile(const TaskTest *task, const char sourceCodeFile[]);
+constexpr char SCRIPTS_FOLDER[] = "./scripts/";
+constexpr char SCRIPT_RUN_PROGRAM_NAME[] = "runProgram.bash";
 
-map<const string, ExitCode> runProgram(const TaskTest *task);
-
-void compileAndRun(const TaskManager *task, const char sourceCodeFile[]);
+void compileAndRun(const TaskManager *task, const char *sourceCodeFile, const char *scriptsFolder);
