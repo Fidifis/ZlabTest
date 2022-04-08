@@ -134,7 +134,14 @@ void compileAndRun(const TaskManager *task, const char *sourceCodeFile, const ch
         compiled = !t->getRecompile() && compiled;
         if (!compiled)
         {
-            t->result->compileResult = compile(t, sourceCodeFile);
+            CompileResult res = compile(t, sourceCodeFile);
+            t->result->compileResult = res;
+            if (res == CompileResult::fail)
+            {
+                compiled = false;
+                cout << "skipping " << t->getTestName() << endl;
+                continue;
+            }
         }
         else
         {
