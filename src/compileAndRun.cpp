@@ -100,7 +100,7 @@ static map<const string, ExitCode> runProgram(const TaskTest *task, const string
             task->getOutputErrors() + filename + ' ' +
             task->getOutputRunTime() + filename;
 
-        const int exitCode = system(cmd.c_str());
+        const int exitCode = system(cmd.c_str()) >> 8;
 
         if (exitCode > MAX_EXPECTED_CODE)
         {
