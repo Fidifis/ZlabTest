@@ -7,5 +7,6 @@
 
 constexpr char SCRIPTS_FOLDER[] = "./scripts/";
 constexpr char SCRIPT_RUN_PROGRAM_NAME[] = "runProgram.bash";
+constexpr char SCRIPT_COMPILE_NAME[] = "compile.bash";
 
 void compileAndRun(const TaskManager *task, const char *sourceCodeFile, const char *scriptsFolder);

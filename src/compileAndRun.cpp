@@ -1,6 +1,6 @@
 #include "compileAndRun.hpp"
 
-static CompileResult compile(const TaskTest *task, const char sourceCodeFile[])
+inline CompileResult compile(const TaskTest *task, const char sourceCodeFile[], const string &script)
 {
     if (sourceCodeFile[0] == '\0')
     {
@@ -21,10 +21,17 @@ static CompileResult compile(const TaskTest *task, const char sourceCodeFile[])
     const string &errFile = task->getCompileErrorsFile();
 
     //g++ --args-- -o '--out.bin--' '--x.cpp--' 2> '--err--'
-    const string cmd = "g++ " + task->getCompileArgs() +
+    /*const string cmd = "g++ " + task->getCompileArgs() +
             " -o '" + binFile +
             "' '" + sourceCodeFile +
-            "' 2> '" + errFile + "'";
+            "' 2> '" + errFile + "'";*/
+
+    const string cmd = "bash " + script + ' ' +
+        task->getCompileArgs() + ' ' +
+        binFile + ' ' +
+        sourceCodeFile + ' ' + 
+        errFile;
+
     int returnCode = system(cmd.c_str());
 
     if (returnCode == 0 && filesystem::exists(binFile))
@@ -60,7 +67,7 @@ static CompileResult compile(const TaskTest *task, const char sourceCodeFile[])
     }
 }
 
-static map<const string, ExitCode> runProgram(const TaskTest *task, const string &script)
+inline map<const string, ExitCode> runProgram(const TaskTest *task, const string &script)
 {
     const string &inputData = task->getInputData();
     if (!filesystem::exists(inputData))
@@ -122,9 +129,17 @@ void compileAndRun(const TaskManager *task, const char *sourceCodeFile, const ch
     string runProgramPath = scripts;
     runProgramPath += SCRIPT_RUN_PROGRAM_NAME;
 
+    string compilePath = scripts;
+    compilePath += SCRIPT_COMPILE_NAME;
+
     if (!filesystem::exists(runProgramPath) || filesystem::is_directory(runProgramPath))
     {
         throw invalid_argument("runProgram.bash doest exist. " + runProgramPath);
+    }
+
+    if (!filesystem::exists(compilePath) || filesystem::is_directory(compilePath))
+    {
+        throw invalid_argument("runProgram.bash doest exist. " + compilePath);
     }
 
     bool compiled = false;
@@ -134,7 +149,7 @@ void compileAndRun(const TaskManager *task, const char *sourceCodeFile, const ch
         compiled = !t->getRecompile() && compiled;
         if (!compiled)
         {
-            CompileResult res = compile(t, sourceCodeFile);
+            CompileResult res = compile(t, sourceCodeFile, compilePath);
             t->result->compileResult = res;
             if (res == CompileResult::fail)
             {
