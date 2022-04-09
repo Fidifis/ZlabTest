@@ -26,11 +26,11 @@ inline CompileResult compile(const TaskTest *task, const char sourceCodeFile[], 
             "' '" + sourceCodeFile +
             "' 2> '" + errFile + "'";*/
 
-    const string cmd = "bash " + script + ' ' +
-        task->getCompileArgs() + ' ' +
-        binFile + ' ' +
-        sourceCodeFile + ' ' + 
-        errFile;
+    const string cmd = "bash '" + script + "' '" +
+        task->getCompileArgs() + "' '" +
+        binFile + "' '"+
+        sourceCodeFile + "' '" + 
+        errFile + "'";
 
     int returnCode = system(cmd.c_str());
 
@@ -99,13 +99,13 @@ inline map<const string, ExitCode> runProgram(const TaskTest *task, const string
             "' 2> '"+ task->getOutputErrors() + filename + "_err" +
             "' ) 2> '" + task->getOutputRunTime() + filename + "_time'";*/
 
-        const string cmd = "bash " + script + ' ' +
-            task->getMaxTime() + ' ' +
-            file.path().string() + ' ' +
-            task->getCompiledBinaryFile() + ' ' +
-            task->getOutputData() + filename + ' ' +
-            task->getOutputErrors() + filename + ' ' +
-            task->getOutputRunTime() + filename;
+        const string cmd = "bash '" + script + "' '" +
+            task->getMaxTime() + "' '" +
+            file.path().string() + "' '" +
+            task->getCompiledBinaryFile() + "' '" +
+            task->getOutputData() + filename + "' '" +
+            task->getOutputErrors() + filename + "' '" +
+            task->getOutputRunTime() + filename + "'";
 
         const int exitCode = system(cmd.c_str()) >> 8;
 
