@@ -127,9 +127,11 @@ void compileAndRun(const TaskManager *task, const char *sourceCodeFile, const ch
         scripts = scriptsFolder;
 
     string runProgramPath = scripts;
+    runProgramPath += '/';
     runProgramPath += SCRIPT_RUN_PROGRAM_NAME;
 
     string compilePath = scripts;
+    compilePath += '/';
     compilePath += SCRIPT_COMPILE_NAME;
 
     if (!filesystem::exists(runProgramPath) || filesystem::is_directory(runProgramPath))

@@ -5,7 +5,7 @@
 #include "result.hpp"
 #include "exitCodes.hpp"
 
-constexpr char SCRIPTS_FOLDER[] = "./scripts/";
+constexpr char SCRIPTS_FOLDER[] = "./scripts";
 constexpr char SCRIPT_RUN_PROGRAM_NAME[] = "runProgram.bash";
 constexpr char SCRIPT_COMPILE_NAME[] = "compile.bash";
 
