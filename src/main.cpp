@@ -120,9 +120,9 @@ int main(int argc, char *argv[])
     }
     catch(const exception& e)
     {
-        cerr << "\033[31m" <<
+        cerr << Logcol::red <<
         "FATAL ERROR: " << endl << e.what() <<
-        "\033[0m" << endl;
+        Logcol::reset << endl;
     }
 
     delete task;

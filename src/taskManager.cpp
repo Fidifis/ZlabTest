@@ -52,7 +52,7 @@ TaskManager::TaskManager(const char path[], const char configPath[])
     }
     else if (state != 2)
     {
-        cerr << "config file not found" << endl;
+        cerr << logcol("config file not found", Logcol::red) << endl;
     }
 
     globalTaskConfig = new Task(js, haveConf ? &conf : nullptr);

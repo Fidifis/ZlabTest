@@ -11,6 +11,7 @@
 #include <map>
 #include <cstdint>
 #include "json.hpp"
+#include "colorfulLog.hpp"
 
 using namespace std;
 using nlohmann::json;
