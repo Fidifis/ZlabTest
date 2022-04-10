@@ -115,7 +115,13 @@ int main(int argc, char *argv[])
 
     try
     {
-        compileAndRun(task, csourceCode, cscripts);
+        if (cscripts != nullptr)
+            Scripts::setScriptDirectory(cscripts);
+
+        else if (!Scripts::exists())
+            throw invalid_argument("scripts directory does not exists or does not contain all scripts");
+
+        compileAndRun(task, csourceCode);
         task->saveResultFile();
     }
     catch(const exception& e)

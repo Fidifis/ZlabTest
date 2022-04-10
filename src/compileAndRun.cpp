@@ -1,6 +1,6 @@
 #include "compileAndRun.hpp"
 
-inline CompileResult compile(const TaskTest *task, const char sourceCodeFile[], const string &script)
+inline CompileResult compile(const TaskTest *task, const char sourceCodeFile[])
 {
     if (sourceCodeFile[0] == '\0')
     {
@@ -26,7 +26,7 @@ inline CompileResult compile(const TaskTest *task, const char sourceCodeFile[], 
             "' '" + sourceCodeFile +
             "' 2> '" + errFile + "'";*/
 
-    const string cmd = "bash '" + script + "' '" +
+    const string cmd = "bash '" + Scripts::getCompile() + "' '" +
         task->getCompileArgs() + "' '" +
         binFile + "' '"+
         sourceCodeFile + "' '" + 
@@ -67,7 +67,7 @@ inline CompileResult compile(const TaskTest *task, const char sourceCodeFile[], 
     }
 }
 
-inline map<const string, ExitCode> runProgram(const TaskTest *task, const string &script)
+inline map<const string, ExitCode> runProgram(const TaskTest *task)
 {
     const string &inputData = task->getInputData();
     if (!filesystem::exists(inputData))
@@ -99,7 +99,7 @@ inline map<const string, ExitCode> runProgram(const TaskTest *task, const string
             "' 2> '"+ task->getOutputErrors() + filename + "_err" +
             "' ) 2> '" + task->getOutputRunTime() + filename + "_time'";*/
 
-        const string cmd = "bash '" + script + "' '" +
+        const string cmd = "bash '" + Scripts::getRunProgram() + "' '" +
             task->getMaxTime() + "' '" +
             file.path().string() + "' '" +
             task->getCompiledBinaryFile() + "' '" +
@@ -118,32 +118,8 @@ inline map<const string, ExitCode> runProgram(const TaskTest *task, const string
     return exitCodes;
 }
 
-void compileAndRun(const TaskManager *task, const char *sourceCodeFile, const char *scriptsFolder)
+void compileAndRun(const TaskManager *task, const char *sourceCodeFile)
 {
-    const char *scripts;
-    if (scriptsFolder == nullptr || scriptsFolder[0] == '\0')
-        scripts = SCRIPTS_FOLDER;
-    else
-        scripts = scriptsFolder;
-
-    string runProgramPath = scripts;
-    runProgramPath += '/';
-    runProgramPath += SCRIPT_RUN_PROGRAM_NAME;
-
-    string compilePath = scripts;
-    compilePath += '/';
-    compilePath += SCRIPT_COMPILE_NAME;
-
-    if (!filesystem::exists(runProgramPath) || filesystem::is_directory(runProgramPath))
-    {
-        throw invalid_argument("runProgram.bash doest exist. " + runProgramPath);
-    }
-
-    if (!filesystem::exists(compilePath) || filesystem::is_directory(compilePath))
-    {
-        throw invalid_argument("runProgram.bash doest exist. " + compilePath);
-    }
-
     bool compiled = false;
     for (size_t i = 0; i < task->size(); ++i)
     {
@@ -151,7 +127,7 @@ void compileAndRun(const TaskManager *task, const char *sourceCodeFile, const ch
         compiled = !t->getRecompile() && compiled;
         if (!compiled)
         {
-            CompileResult res = compile(t, sourceCodeFile, compilePath);
+            CompileResult res = compile(t, sourceCodeFile);
             t->result->compileResult = res;
             if (res == CompileResult::fail)
             {
@@ -165,7 +141,7 @@ void compileAndRun(const TaskManager *task, const char *sourceCodeFile, const ch
             t->result->compileResult = CompileResult::none;
         }
 
-        t->result->unexpectedExitCodes = runProgram(t, runProgramPath);
+        t->result->unexpectedExitCodes = runProgram(t);
         compiled = !t->getRecompile();
     }
 }
