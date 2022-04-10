@@ -83,7 +83,7 @@ inline map<const string, ExitCode> runProgram(const TaskTest *task)
 
     map<const string, ExitCode> exitCodes;
 
-    for (auto &file : filesystem::directory_iterator(inputData)) {
+    for (const auto &file : filesystem::directory_iterator(inputData)) {
         if (!file.exists() || file.is_directory())
             continue;
 

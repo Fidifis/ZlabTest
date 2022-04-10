@@ -3,13 +3,15 @@
 
 constexpr char SCRIPT_COMPILE_NAME[] = "compile.bash";
 constexpr char SCRIPT_RUN_PROGRAM_NAME[] = "runProgram.bash";
+constexpr char SCRIPT_DIFFERENCE_NAME[] = "difference.bash";
 
 class Scripts
 {
 private:
-    inline static string scriptsDirectory = "./scripts";
-    inline static string compile = scriptsDirectory + '/' + SCRIPT_COMPILE_NAME;
-    inline static string runProgram = scriptsDirectory + '/' + SCRIPT_RUN_PROGRAM_NAME;
+    inline static string scriptsDirectory = "./scripts/";
+    inline static string compile = scriptsDirectory + SCRIPT_COMPILE_NAME;
+    inline static string runProgram = scriptsDirectory + SCRIPT_RUN_PROGRAM_NAME;
+    inline static string difference = scriptsDirectory + SCRIPT_DIFFERENCE_NAME;
 
 public:
     static bool exists();
@@ -22,5 +24,9 @@ public:
     inline static string getRunProgram()
     {
         return runProgram;
+    }
+    inline static string getDifference()
+    {
+        return difference;
     }
 };

@@ -26,6 +26,16 @@ json Result::toJson() const
             js["unexpectedExitCodes"][item.first] = s;
         }
     }
+
+
+    if (differingOutput.size() == 0)
+    {
+        js["differingOutput"] = "none";
+    }
+    else
+    {
+        js["differingOutput"] = differingOutput;
+    }
     return js;
 }
 

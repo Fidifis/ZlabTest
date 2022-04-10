@@ -23,6 +23,7 @@ class Result
 public:
     CompileResult compileResult;
     map<const string, ExitCode> unexpectedExitCodes;
+    vector<string> differingOutput;
 
     json toJson() const;
 
