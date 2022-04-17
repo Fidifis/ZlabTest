@@ -78,7 +78,19 @@ TaskManager::~TaskManager()
         delete t;
     }
 }
-void TaskManager::saveResultFile() const {
+
+void TaskManager::run(const char *sourceCodeFile) const
+{
+    bool compile = false;
+    for (size_t i = 0; i < tasks.size(); ++i)
+    {
+        compileAndRun(tasks[i], compile, sourceCodeFile);
+        difference(tasks[i]);
+    }
+}
+
+void TaskManager::saveResultFile() const
+{
     if (tasks.size() == 0)
     {
         cerr << "no tests to save the result" << endl;

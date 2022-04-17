@@ -118,30 +118,25 @@ inline map<const string, ExitCode> runProgram(const TaskTest *task)
     return exitCodes;
 }
 
-void compileAndRun(const TaskManager *task, const char *sourceCodeFile)
+void compileAndRun(const TaskTest *task, bool &compiled, const char *sourceCodeFile)
 {
-    bool compiled = false;
-    for (size_t i = 0; i < task->size(); ++i)
+    compiled = !task->getRecompile() && compiled;
+    if (!compiled)
     {
-        const TaskTest *t = (*task)[i];
-        compiled = !t->getRecompile() && compiled;
-        if (!compiled)
+        CompileResult res = compile(task, sourceCodeFile);
+        task->result->compileResult = res;
+        if (res == CompileResult::fail)
         {
-            CompileResult res = compile(t, sourceCodeFile);
-            t->result->compileResult = res;
-            if (res == CompileResult::fail)
-            {
-                compiled = false;
-                cout << "skipping " << t->getTestName() << endl;
-                continue;
-            }
+            compiled = false;
+            cout << "skipping " << task->getTestName() << endl;
+            return;
         }
-        else
-        {
-            t->result->compileResult = CompileResult::none;
-        }
-
-        t->result->unexpectedExitCodes = runProgram(t);
-        compiled = !t->getRecompile();
     }
+    else
+    {
+        task->result->compileResult = CompileResult::none;
+    }
+
+    task->result->unexpectedExitCodes = runProgram(task);
+    compiled = !task->getRecompile();
 }

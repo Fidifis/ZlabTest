@@ -1,6 +1,6 @@
 #pragma once
 #include "headers.hpp"
-#include "taskManager.hpp"
+#include "taskTest.hpp"
 #include "scripts.hpp"
 
-void difference(const TaskManager *task);
+void difference(const TaskTest *task);

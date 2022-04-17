@@ -1,7 +1,5 @@
 #include "headers.hpp"
 #include "taskManager.hpp"
-#include "compileAndRun.hpp"
-#include "difference.hpp"
 
 void clearFiles(const Task *task)
 {
@@ -122,8 +120,7 @@ int main(int argc, char *argv[])
         else if (!Scripts::exists())
             throw invalid_argument("scripts directory does not exists or does not contain all scripts");
 
-        compileAndRun(task, csourceCode);
-        difference(task);
+        task->run(csourceCode);
         task->saveResultFile();
     }
     catch(const exception& e)

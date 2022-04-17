@@ -3,6 +3,8 @@
 #include "task.hpp"
 #include "taskTest.hpp"
 #include "result.hpp"
+#include "compileAndRun.hpp"
+#include "difference.hpp"
 
 constexpr char CONFIG_FILE_NAME[] = "config.json";
 
@@ -15,6 +17,8 @@ private:
 public:
     TaskManager(const char path[], const char configPath[] = "");
     ~TaskManager();
+
+    void run(const char *sourceCodeFile) const;
 
     void saveResultFile() const;
 
