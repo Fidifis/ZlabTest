@@ -46,12 +46,16 @@ protected:
             StringRef(outputRunTime, "$(playground)/$(taskName)/$(testName)/time/", ParamType::path | ParamType::containVariables);
             StringRef(differenceData, "$(playground)/$(taskName)/$(testName)/diff/", ParamType::path | ParamType::containVariables);
             StringRef(resultFile, "$(playground)/$(taskName)/result.json", (Flags)ParamType::containVariables);
-            StringRef(prerequisite, "[]", 0);
+            StringRef(prerequisite, "[]", (Flags)ParamType::specialLoad);
         } paramStruct = ParamStruct();
 
         ParamUnion() { }
         ~ParamUnion() { paramStruct.~ParamStruct(); } //bez tohoto řádku dojde k memory leaku
     } paramHolder;
+
+    bool recompile = false;
+
+    vector<string> prerequisiteArr;
 
     Task() { }
 
@@ -63,11 +67,13 @@ protected:
 
     inline void addSlashOnEnd(string &arg);
 
-    virtual void SpecialLoad(stringRef& item, const string& jsonValue);
+    void SpecialLoad(stringRef& item, const string& jsonValue, const nlohmann::json &json);
 
 public:
     Task(const json& taskJson, const json* globalConfig);
     virtual ~Task() { }
+
+    inline bool getRecompile() const { return recompile; }
 
     inline const string& getTaskName() const { return PARAM.taskName.value; }
     inline const string& getTestName() const { return PARAM.testName.value; }

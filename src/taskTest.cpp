@@ -9,18 +9,6 @@ TaskTest::TaskTest(const Task *task, const string &testName, const nlohmann::jso
     substituteAllNames();
 }
 
-void TaskTest::SpecialLoad(stringRef& item, const string& jsonValue)
-{
-    if (item.key == PARAM.compileArgs.key)
-    {
-        if (PARAM.compileArgs.value != jsonValue)
-        {
-            recompile = true;
-            PARAM.compileArgs = jsonValue;
-        }
-    }
-}
-
 TaskTest::~TaskTest()
 {
     delete result;

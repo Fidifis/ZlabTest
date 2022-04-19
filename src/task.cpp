@@ -26,6 +26,7 @@ void Task::copy(const Task *task)
 
 void Task::loadParameters(const json &js)
 {
+    recompile = false;
     for (auto &item : PARAM_ARRAY)
     {
         if (js.contains(item.key))
@@ -34,7 +35,7 @@ void Task::loadParameters(const json &js)
             {
                 if (item.flags & ParamType::specialLoad)
                 {
-                    SpecialLoad(item, js[item.key]);
+                    SpecialLoad(item, js[item.key], js);
                 }
                 else
                 {
@@ -49,8 +50,21 @@ void Task::loadParameters(const json &js)
     }
 }
 
-void Task::SpecialLoad(stringRef& item, const string& jsonValue) {
-    item = jsonValue;
+void Task::SpecialLoad(stringRef& item, const string& jsonValue, const nlohmann::json &json) {
+    if (item.key == PARAM.compileArgs.key)
+    {
+        if (PARAM.compileArgs.value != jsonValue)
+        {
+            recompile = true;
+            PARAM.compileArgs = jsonValue;
+        }
+    }
+    if (item.key == PARAM.prerequisite.key)
+    {
+        PARAM.prerequisite = jsonValue;
+
+        prerequisiteArr = json[PARAM.prerequisite.key].get<vector<string>>();
+    }
 }
 
 void Task::substituteAllNames() {
