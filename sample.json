@@ -16,10 +16,12 @@
     },
     "zakladni_test": {},
     "memory_test": {
-        "compileArgs": "-std=c++17 -Wall -pedantic -O2 -g -fsanitize=address,leak"
+        "compileArgs": "-std=c++17 -Wall -pedantic -O2 -g -fsanitize=address,leak",
+        "prerequisite": ["zakladni_test"]
     },
     "test_rychlosti": {
     	"maxTime": "0.5",
-    	"compileArgs": "-std=c++17 -Wall -pedantic -O0"
+    	"compileArgs": "-std=c++17 -Wall -pedantic -O0",
+        "prerequisite": ["zakladni_test", "memory_test"]
     }
 }

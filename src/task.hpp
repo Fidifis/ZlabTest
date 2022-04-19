@@ -4,7 +4,7 @@
 #include "stringRef.hpp"
 
 //----------keep this updated---------------
-#define TASK_NUMBER_OF_PARAMETERS 14
+#define TASK_NUMBER_OF_PARAMETERS 15
 #define PARAMETER_TASK_NAME_SYMBOL taskName
 #define PARAMETER_SHARED_SYMBOL shared
 //------------------------------------------
@@ -46,6 +46,7 @@ protected:
             StringRef(outputRunTime, "$(playground)/$(taskName)/$(testName)/time/", ParamType::path | ParamType::containVariables);
             StringRef(differenceData, "$(playground)/$(taskName)/$(testName)/diff/", ParamType::path | ParamType::containVariables);
             StringRef(resultFile, "$(playground)/$(taskName)/result.json", (Flags)ParamType::containVariables);
+            StringRef(prerequisite, "[]", 0);
         } paramStruct = ParamStruct();
 
         ParamUnion() { }
@@ -82,4 +83,5 @@ public:
     inline const string& getOutputRunTime() const { return PARAM.outputRunTime.value; }
     inline const string& getDifferenceData() const { return PARAM.differenceData.value; }
     inline const string& getResultFile() const { return PARAM.resultFile.value; }
+    inline const string& getPrerequisite() const { return PARAM.prerequisite.value; }
 };
