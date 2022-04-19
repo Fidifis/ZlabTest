@@ -10,9 +10,14 @@
         "compiledBinaryFile": "$(playground)/$(taskName)/out.bin",
         "compileErrorsFile": "$(playground)/$(taskName)/compile_errors",
         "outputErrors": "$(playground)/$(taskName)/$(testName)/errors/",
-        "outputRunTime": "$(playground)/$(taskName)/$(testName)/time/"
+        "outputRunTime": "$(playground)/$(taskName)/$(testName)/time/",
+        "differenceData": "$(playground)/$(taskName)/$(testName)/diff/",
+        "resultFile": "$(playground)/$(taskName)/result.json"
     },
     "zakladni_test": {},
+    "memory_test": {
+        "compileArgs": "-std=c++17 -Wall -pedantic -O2 -g -fsanitize=address,leak"
+    },
     "test_rychlosti": {
     	"maxTime": "0.5",
     	"compileArgs": "-std=c++17 -Wall -pedantic -O0"
