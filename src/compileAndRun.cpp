@@ -1,5 +1,14 @@
 #include "compileAndRun.hpp"
 
+inline static string getParentPath(const string &path)
+{
+    auto i = path.end();
+    if (*i == '/') --i;
+    for (; i > path.begin(); --i)
+        if (*i == '/')
+            return path.substr(0, i - path.begin());
+}
+
 inline static CompileResult compile(const TaskTest *task, const char sourceCodeFile[])
 {
     if (sourceCodeFile[0] == '\0')
@@ -19,6 +28,11 @@ inline static CompileResult compile(const TaskTest *task, const char sourceCodeF
 
     const string &binFile = task->getCompiledBinaryFile();
     const string &errFile = task->getCompileErrorsFile();
+
+    if (filesystem::create_directories(getParentPath(binFile)))
+        cout << "Create directory for " << binFile << endl;
+    if (filesystem::create_directories(getParentPath(errFile)))
+        cout << "Create directory for " << errFile << endl;
 
     //g++ --args-- -o '--out.bin--' '--x.cpp--' 2> '--err--'
     /*const string cmd = "g++ " + task->getCompileArgs() +
@@ -80,6 +94,13 @@ inline static map<const string, ExitCode> runProgram(const TaskTest *task)
     }
 
     cout << "Executing program with inputs from: " << inputData << endl;
+
+    if (filesystem::create_directories(task->getOutputData()))
+        cout << "Create directory for " << task->getOutputData() << endl;
+    if (filesystem::create_directories(task->getOutputErrors()))
+        cout << "Create directory for " << task->getOutputErrors() << endl;
+    if (filesystem::create_directories(task->getOutputRunTime()))
+        cout << "Create directory for " << task->getOutputRunTime() << endl;
 
     map<const string, ExitCode> exitCodes;
 

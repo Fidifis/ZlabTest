@@ -23,6 +23,9 @@ void difference(const TaskTest *test)
 
     cout << "Comparing with reference from: " << referenceData << endl;
 
+    if (filesystem::create_directories(test->getDifferenceData()))
+        cout << "Create directory for " << test->getDifferenceData() << endl;
+
     vector<string> diffTests;
     for (const auto &file : filesystem::directory_iterator(outputData)) {
         if (!file.exists() || file.is_directory())
