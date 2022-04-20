@@ -1,6 +1,5 @@
 #pragma once
-#include <iostream>
-#include <string>
+#include "headers.hpp"
 
 #define ANSI_RESET "\033[0m"
 #define ANSI_RED "\033[31m"

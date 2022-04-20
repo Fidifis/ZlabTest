@@ -4,7 +4,7 @@
 constexpr char START_TOKEN[] = "$(";
 constexpr char END_TOKEN[] = ")";
 
-static inline bool findPosition(const string &text, size_t &startPos, size_t &length)
+inline bool findPosition(const string &text, size_t &startPos, size_t &length)
 {
     startPos = text.find(START_TOKEN, 0);
     if (startPos != string::npos)

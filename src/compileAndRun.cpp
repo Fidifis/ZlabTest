@@ -1,6 +1,6 @@
 #include "compileAndRun.hpp"
 
-inline CompileResult compile(const TaskTest *task, const char sourceCodeFile[])
+inline static CompileResult compile(const TaskTest *task, const char sourceCodeFile[])
 {
     if (sourceCodeFile[0] == '\0')
     {
@@ -67,7 +67,7 @@ inline CompileResult compile(const TaskTest *task, const char sourceCodeFile[])
     }
 }
 
-inline map<const string, ExitCode> runProgram(const TaskTest *task)
+inline static map<const string, ExitCode> runProgram(const TaskTest *task)
 {
     const string &inputData = task->getInputData();
     if (!filesystem::exists(inputData))
