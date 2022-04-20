@@ -7,6 +7,7 @@ inline static string getParentPath(const string &path)
     for (; i > path.begin(); --i)
         if (*i == '/')
             return path.substr(0, i - path.begin());
+    return path;
 }
 
 inline static CompileResult compile(const TaskTest *task, const char sourceCodeFile[])
