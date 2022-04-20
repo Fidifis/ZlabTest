@@ -18,8 +18,23 @@ inline const char* compileResultToString(CompileResult cr)
     }
 }
 
+enum class ResultState { passed, failed, not_tested };
+inline const char* resultStateToString(ResultState st)
+{
+    switch(st)
+    {
+        case ResultState::passed: return "passed";
+        case ResultState::failed: return "failed";
+        case ResultState::not_tested: return "not_tested";
+        default: return "unknown";
+    }
+}
+
 class Result
 {
+private:
+    ResultState state;
+
 public:
     CompileResult compileResult;
     map<const string, ExitCode> unexpectedExitCodes;
