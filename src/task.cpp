@@ -22,6 +22,7 @@ void Task::copy(const Task *task)
     {
         PARAM_ARRAY[i] = task->PARAM_ARRAY[i];
     }
+    prerequisite = task->prerequisite;
 }
 
 void Task::loadParameters(const json &js)
@@ -35,7 +36,7 @@ void Task::loadParameters(const json &js)
             {
                 if (item.flags & ParamType::specialLoad)
                 {
-                    SpecialLoad(item, js[item.key], js);
+                    SpecialLoad(item, js);
                 }
                 else
                 {
@@ -48,22 +49,21 @@ void Task::loadParameters(const json &js)
             }
         }
     }
+
+    if (js.contains(prerequisite.key))
+    {
+        prerequisite = js[prerequisite.key].get<vector<string>>();
+    }
 }
 
-void Task::SpecialLoad(stringRef& item, const string& jsonValue, const nlohmann::json &json) {
+void Task::SpecialLoad(stringRef<string> &item, const nlohmann::json &json) {
     if (item.key == PARAM.compileArgs.key)
     {
-        if (PARAM.compileArgs.value != jsonValue)
+        if (PARAM.compileArgs.value != json[item.key])
         {
             recompile = true;
-            PARAM.compileArgs = jsonValue;
+            PARAM.compileArgs = json[item.key];
         }
-    }
-    if (item.key == PARAM.prerequisite.key)
-    {
-        PARAM.prerequisite = jsonValue;
-
-        prerequisiteArr = json[PARAM.prerequisite.key].get<vector<string>>();
     }
 }
 

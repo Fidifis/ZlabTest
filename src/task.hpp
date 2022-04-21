@@ -4,7 +4,7 @@
 #include "stringRef.hpp"
 
 //----------keep this updated---------------
-#define TASK_NUMBER_OF_PARAMETERS 15
+#define TASK_NUMBER_OF_PARAMETERS 14
 #define PARAMETER_TASK_NAME_SYMBOL taskName
 #define PARAMETER_SHARED_SYMBOL shared
 //------------------------------------------
@@ -28,7 +28,7 @@ protected:
 
     union ParamUnion
     {
-        array<stringRef, TASK_NUMBER_OF_PARAMETERS> paramArray;
+        array<stringRef<string>, TASK_NUMBER_OF_PARAMETERS> paramArray;
         struct ParamStruct {
             
             StringRef(PARAMETER_TASK_NAME_SYMBOL, "unnamed", (Flags)ParamType::manualLoad);
@@ -46,16 +46,14 @@ protected:
             StringRef(outputRunTime, "$(playground)/$(taskName)/$(testName)/time/", ParamType::path | ParamType::containVariables);
             StringRef(differenceData, "$(playground)/$(taskName)/$(testName)/diff/", ParamType::path | ParamType::containVariables);
             StringRef(resultFile, "$(playground)/$(taskName)/result.json", (Flags)ParamType::containVariables);
-            StringRef(prerequisite, "[]", (Flags)ParamType::specialLoad);
         } paramStruct = ParamStruct();
 
         ParamUnion() { }
         ~ParamUnion() { paramStruct.~ParamStruct(); } //bez tohoto řádku dojde k memory leaku
     } paramHolder;
 
+    Reflective(vector<string>, prerequisite, 0);
     bool recompile = false;
-
-    vector<string> prerequisiteArr;
 
     Task() { }
 
@@ -67,7 +65,7 @@ protected:
 
     inline void addSlashOnEnd(string &arg);
 
-    void SpecialLoad(stringRef& item, const string& jsonValue, const nlohmann::json &json);
+    void SpecialLoad(stringRef<string>& item, const nlohmann::json &json);
 
 public:
     Task(const json& taskJson, const json* globalConfig);
@@ -89,5 +87,4 @@ public:
     inline const string& getOutputRunTime() const { return PARAM.outputRunTime.value; }
     inline const string& getDifferenceData() const { return PARAM.differenceData.value; }
     inline const string& getResultFile() const { return PARAM.resultFile.value; }
-    inline const string& getPrerequisite() const { return PARAM.prerequisite.value; }
 };

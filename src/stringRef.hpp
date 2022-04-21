@@ -3,33 +3,34 @@
 
 #define X_MAKE_STR(x) #x
 #define MAKE_STR(x) X_MAKE_STR(x)
-#define StringRef(name, value, flags) stringRef name { MAKE_STR(name), value, flags }
+#define Reflective(type, name, flags) stringRef<type> name { MAKE_STR(name), flags }
+#define ReflectiveV(type, name, value, flags) stringRef<type> name { MAKE_STR(name), value, flags }
+#define StringRef(name, value, flags) ReflectiveV(std::string, name, value, flags)
 
 typedef unsigned int Flags;
 
 //Reflective String
+template<typename T>
 struct stringRef
 {
     string key;
-    string value;
+    T value;
 
     Flags flags;
 
-    stringRef (const string& key, const string& value, Flags flags) {
+    stringRef (const string& key, const T& value, Flags flags) {
         this->key = key;
         this->value = value;
         this->flags = flags;
     }
 
-    stringRef (const char * key, const char * value, Flags flags) {
+    stringRef (const string& key, Flags flags) {
         this->key = key;
-        this->value = value;
         this->flags = flags;
     }
 
-    inline operator string&() { return value; }
-    inline operator const string&() const { return value; }
+    inline operator T&() { return value; }
+    inline operator const T&() const { return value; }
 
-    inline stringRef& operator= (const string& str) { value = str; return *this; }
-    inline stringRef& operator= (const char * str) { value = str; return *this; }
+    inline stringRef& operator= (const T& str) { value = str; return *this; }
 };
