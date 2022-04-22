@@ -23,6 +23,8 @@ void Task::copy(const Task *task)
         PARAM_ARRAY[i] = task->PARAM_ARRAY[i];
     }
     prerequisite = task->prerequisite;
+    acquirablePoints = task->acquirablePoints;
+    requiredPercentage = task->requiredPercentage;
 }
 
 void Task::loadParameters(const json &js)
@@ -62,8 +64,18 @@ void Task::SpecialLoad(reflective<string> &item, const nlohmann::json &json) {
         if (PARAM.compileArgs.value != json[item.key])
         {
             recompile = true;
-            PARAM.compileArgs = json[item.key];
+            item = json[item.key];
         }
+    }
+    else if (item.key == PARAM.acquirablePoints.key)
+    {
+        item = json[item.key];
+        acquirablePoints = stoi(item);
+    }
+    else if (item.key == PARAM.requiredPercentage.key)
+    {
+        item = json[item.key];
+        requiredPercentage = stof(item);
     }
 }
 

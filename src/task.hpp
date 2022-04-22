@@ -4,7 +4,7 @@
 #include "stringRef.hpp"
 
 //----------keep this updated---------------
-#define TASK_NUMBER_OF_PARAMETERS 14
+#define TASK_NUMBER_OF_PARAMETERS 16
 #define PARAMETER_TASK_NAME_SYMBOL taskName
 #define PARAMETER_SHARED_SYMBOL shared
 //------------------------------------------
@@ -46,6 +46,8 @@ protected:
             StringRef(outputRunTime, "$(playground)/$(taskName)/$(testName)/time/", ParamType::path | ParamType::containVariables);
             StringRef(differenceData, "$(playground)/$(taskName)/$(testName)/diff/", ParamType::path | ParamType::containVariables);
             StringRef(resultFile, "$(playground)/$(taskName)/result.json", (Flags)ParamType::containVariables);
+            StringRef(requiredPercentage, "0", (Flags)ParamType::specialLoad);
+            StringRef(acquirablePoints, "10", (Flags)ParamType::specialLoad);
         } paramStruct = ParamStruct();
 
         ParamUnion() { }
@@ -53,6 +55,8 @@ protected:
     } paramHolder;
 
     Reflective(vector<string>, prerequisite, 0);
+    float requiredPercentage = 0;
+    int acquirablePoints = 10;
     bool recompile = false;
 
     Task() { }
@@ -87,4 +91,7 @@ public:
     inline const string& getOutputRunTime() const { return PARAM.outputRunTime.value; }
     inline const string& getDifferenceData() const { return PARAM.differenceData.value; }
     inline const string& getResultFile() const { return PARAM.resultFile.value; }
+    inline const vector<string>& getPrerequisite() const { return prerequisite.value; }
+    inline int getRequiredPercentage() const { return requiredPercentage; }
+    inline int getAcquirablePoints() const { return acquirablePoints; }
 };

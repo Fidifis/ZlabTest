@@ -32,11 +32,11 @@ inline const char* resultStateToString(ResultState st)
 
 class Result
 {
-private:
-    ResultState state;
-
 public:
-    CompileResult compileResult;
+    ResultState state = ResultState::not_tested;
+    float successPercent = 0.f;
+
+    CompileResult compileResult = CompileResult::none;
     map<const string, ExitCode> unexpectedExitCodes;
     vector<string> differingOutput;
 
