@@ -28,7 +28,7 @@ protected:
 
     union ParamUnion
     {
-        array<stringRef<string>, TASK_NUMBER_OF_PARAMETERS> paramArray;
+        array<reflective<string>, TASK_NUMBER_OF_PARAMETERS> paramArray;
         struct ParamStruct {
             
             StringRef(PARAMETER_TASK_NAME_SYMBOL, "unnamed", (Flags)ParamType::manualLoad);
@@ -65,7 +65,7 @@ protected:
 
     inline void addSlashOnEnd(string &arg);
 
-    void SpecialLoad(stringRef<string>& item, const nlohmann::json &json);
+    void SpecialLoad(reflective<string>& item, const nlohmann::json &json);
 
 public:
     Task(const json& taskJson, const json* globalConfig);

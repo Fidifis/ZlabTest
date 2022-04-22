@@ -56,7 +56,7 @@ void Task::loadParameters(const json &js)
     }
 }
 
-void Task::SpecialLoad(stringRef<string> &item, const nlohmann::json &json) {
+void Task::SpecialLoad(reflective<string> &item, const nlohmann::json &json) {
     if (item.key == PARAM.compileArgs.key)
     {
         if (PARAM.compileArgs.value != json[item.key])
