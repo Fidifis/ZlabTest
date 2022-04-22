@@ -110,10 +110,14 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    const TaskManager *task = new TaskManager(ctask, cconfig);
+    const TaskManager *task;
+    bool taskAllocated = false;
 
     try
     {
+        task = new TaskManager(ctask, cconfig);
+        taskAllocated = true;
+
         if (cscripts != nullptr)
             Scripts::setScriptDirectory(cscripts);
 
@@ -130,6 +134,10 @@ int main(int argc, char *argv[])
         Logcol::reset << endl;
     }
 
-    delete task;
+    if (taskAllocated)
+        #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+        delete task;
+        #pragma GCC diagnostic pop
+
     return 0;
 }
