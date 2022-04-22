@@ -3,10 +3,11 @@
 
 #define ANSI_RESET "\033[0m"
 #define ANSI_RED "\033[31m"
-#define ANSI_GREEN "\033[31m"
-#define ANSI_BLUE "\033[31m"
+#define ANSI_GREEN "\033[32m"
+#define ANSI_YELLOW "\033[33m"
+#define ANSI_BLUE "\033[34m"
 
-enum class Logcol {reset, red, green, blue};
+enum class Logcol {reset, red, green, yellow, blue};
 
 inline const char* getAnsiForColor(Logcol color)
 {
@@ -20,6 +21,9 @@ inline const char* getAnsiForColor(Logcol color)
     
     case Logcol::green:
         return ANSI_GREEN;
+
+    case Logcol::yellow:
+        return ANSI_YELLOW;
 
     case Logcol::blue:
         return ANSI_BLUE;
