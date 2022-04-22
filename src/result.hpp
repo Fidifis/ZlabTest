@@ -41,6 +41,4 @@ public:
     vector<string> differingOutput;
 
     json toJson() const;
-
-    static void saveResult(const vector<TaskTest*> &tasks, const string &path);
 };

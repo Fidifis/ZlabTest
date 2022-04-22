@@ -96,5 +96,19 @@ void TaskManager::saveResultFile() const
         cerr << "no tests to save the result" << endl;
         return;
     }
-    Result::saveResult(tasks, tasks[0]->getResultFile());
+    saveResult(tasks, tasks[0]->getResultFile());
+}
+
+void TaskManager::saveResult(const vector<TaskTest*> &tasks, const string &path) const {
+    cout << "Saving result file to: " << path << endl;
+    ofstream stream(path);
+    json js;
+
+    for (const TaskTest *test : tasks)
+    {
+        js[test->getTestName()] = test->result->toJson();
+    }
+
+    stream << setw(4) << js;
+    stream.close();
 }

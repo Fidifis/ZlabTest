@@ -14,6 +14,8 @@ private:
     Task *globalTaskConfig;
     vector<TaskTest*> tasks;
 
+    void saveResult(const vector<TaskTest*> &tasks, const string &path) const;
+
 public:
     TaskManager(const char path[], const char configPath[] = "");
     ~TaskManager();
@@ -21,9 +23,4 @@ public:
     void run(const char *sourceCodeFile) const;
 
     void saveResultFile() const;
-
-    inline const TaskTest* operator[] (int index) const { return tasks[index]; }
-    inline size_t size() const { return tasks.size(); }
-
-    inline const Task * getGlobalTaskConfig() const { return globalTaskConfig; }
 };

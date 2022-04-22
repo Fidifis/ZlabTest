@@ -38,17 +38,3 @@ json Result::toJson() const
     }
     return js;
 }
-
-void Result::saveResult(const vector<TaskTest*> &tasks, const string &path) {
-    cout << "Saving result file to: " << path << endl;
-    ofstream stream(path);
-    json js;
-
-    for (const TaskTest *test : tasks)
-    {
-        js[test->getTestName()] = test->result->toJson();
-    }
-
-    stream << setw(4) << js;
-    stream.close();
-}
