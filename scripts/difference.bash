@@ -3,5 +3,5 @@ OUTPUT="$1";
 REFERENCE="$2";
 DIFF_FILE="$3";
 
-diff -y --width=50 "$OUTPUT" "$REFERENCE" > "$DIFF_FILE";
+diff -u "$REFERENCE" "$OUTPUT" | tail -n +3 > "$DIFF_FILE";
 exit "$?";

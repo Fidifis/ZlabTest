@@ -33,6 +33,7 @@ public:
     ResultState state = ResultState::not_tested;
     float successPercent = 0.f;
     int acquiredPoints = 0;
+    unsigned long long maxTime = 0;
 
     CompileResult compileResult = CompileResult::none;
     map<const string, ExitCode> unexpectedExitCodes;

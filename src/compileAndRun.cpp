@@ -82,7 +82,7 @@ inline static CompileResult compile(const TaskTest *task, const char sourceCodeF
     }
 }
 
-inline static map<const string, ExitCode> runProgram(const TaskTest *task)
+inline static unsigned long long runProgram(const TaskTest *task, map<const string, ExitCode> &exitCodes)
 {
     const string &inputData = task->getInputData();
     if (!filesystem::exists(inputData))
@@ -103,7 +103,7 @@ inline static map<const string, ExitCode> runProgram(const TaskTest *task)
     if (filesystem::create_directories(task->getOutputRunTime()))
         cout << "Create directory for " << task->getOutputRunTime() << endl;
 
-    map<const string, ExitCode> exitCodes;
+    unsigned long long maxTime = 0;
 
     for (const auto &file : filesystem::directory_iterator(inputData)) {
         if (!file.exists() || file.is_directory())
@@ -121,13 +121,14 @@ inline static map<const string, ExitCode> runProgram(const TaskTest *task)
             "' 2> '"+ task->getOutputErrors() + filename + "_err" +
             "' ) 2> '" + task->getOutputRunTime() + filename + "_time'";*/
 
+        const string timeFile = task->getOutputRunTime() + filename;
         const string cmd = "bash '" + Scripts::getRunProgram() + "' '" +
             task->getMaxTime() + "' '" +
             file.path().string() + "' '" +
             task->getCompiledBinaryFile() + "' '" +
             task->getOutputData() + filename + "' '" +
             task->getOutputErrors() + filename + "' '" +
-            task->getOutputRunTime() + filename + "'";
+            timeFile + "'";
 
         const int exitCode = system(cmd.c_str()) >> 8;
 
@@ -135,9 +136,26 @@ inline static map<const string, ExitCode> runProgram(const TaskTest *task)
         {
             exitCodes[filename] = exitCode;
         }
+
+        try
+        {
+            ifstream timeFileStream(timeFile);
+            string content;
+            getline(timeFileStream, content, '\0');
+            timeFileStream.close();
+
+            unsigned long long time = stoul(content);
+            if (time > maxTime) maxTime = time;
+        }
+        catch(const exception& e)
+        {
+            cerr << Logcol::yellow <<
+            "ERROR WHEN PARSING FROM TIME FILE: " << endl << e.what() <<
+            Logcol::reset << endl;
+        }
     }
 
-    return exitCodes;
+    return maxTime;
 }
 
 void compileAndRun(const TaskTest *task, bool &compiled, const char *sourceCodeFile)
@@ -159,6 +177,6 @@ void compileAndRun(const TaskTest *task, bool &compiled, const char *sourceCodeF
         task->result->compileResult = CompileResult::none;
     }
 
-    task->result->unexpectedExitCodes = runProgram(task);
+    task->result->maxTime = runProgram(task, task->result->unexpectedExitCodes);
     compiled = !task->getRecompile();
 }

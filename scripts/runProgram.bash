@@ -6,5 +6,14 @@ OUTPUT="$4";
 ERRORS="$5";
 TIME_FILE="$6";
 
-( '/usr/bin/time' -o "$TIME_FILE" -f '%E' timeout "$TIME" cat "$FILE" | "$BIN" > "$OUTPUT" 2> "$ERRORS" ) 2>> "$ERRORS";
-exit "$?";
+START="$(date +%N)";
+
+( timeout "$TIME" cat "$FILE" | "$BIN" > "$OUTPUT" 2> "$ERRORS" ) 2>> "$ERRORS";
+EXIT="$?";
+
+END="$(date +%N)";
+DIFF=$(((10#$END - 10#$START)/1000000));
+
+echo "$DIFF" > "$TIME_FILE";
+
+exit "$EXIT";

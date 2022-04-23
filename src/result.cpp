@@ -8,6 +8,7 @@ json Result::toJson() const
     js["successPercent"] = successPercent;
     js["acquiredPoints"] = acquiredPoints;
     js["compileResult"] = compileResultToString(compileResult);
+    js["maxTime"] = maxTime;
 
     if (unexpectedExitCodes.size() == 0)
     {
