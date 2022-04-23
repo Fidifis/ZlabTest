@@ -131,6 +131,8 @@ void TaskManager::run(const char *sourceCodeFile) const
 
             else
                 tasks[i]->result->state = ResultState::failed;
+
+            tasks[i]->result->acquiredPoints = tasks[i]->getAcquirablePoints() * (tasks[i]->result->successPercent / 100.f);
         }
     }
 }
@@ -150,10 +152,14 @@ void TaskManager::saveResult(const vector<TaskTest*> &tasks, const string &path)
     ofstream stream(path);
     json js;
 
+    int totalPoints = 0;
     for (const TaskTest *test : tasks)
     {
-        js[test->getTestName()] = test->result->toJson();
+        js["test results"][test->getTestName()] = test->result->toJson();
+        totalPoints += test->result->acquiredPoints;
     }
+
+    js["total points"] = totalPoints;
 
     stream << setw(4) << js;
     stream.close();

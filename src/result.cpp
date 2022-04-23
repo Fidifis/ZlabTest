@@ -6,6 +6,7 @@ json Result::toJson() const
 
     js["state"] = resultStateToString(state);
     js["successPercent"] = successPercent;
+    js["acquiredPoints"] = acquiredPoints;
     js["compileResult"] = compileResultToString(compileResult);
 
     if (unexpectedExitCodes.size() == 0)
