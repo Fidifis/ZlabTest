@@ -1,9 +1,6 @@
 #pragma once
 #include "headers.hpp"
 #include "exitCodes.hpp"
-#include "taskTest.hpp"
-
-class TaskTest;
 
 enum class CompileResult {none, success, warrings, fail};
 inline const char* compileResultToString(CompileResult cr)

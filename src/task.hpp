@@ -75,8 +75,6 @@ public:
     Task(const json& taskJson, const json* globalConfig);
     virtual ~Task() { }
 
-    inline bool getRecompile() const { return recompile; }
-
     inline const string& getTaskName() const { return PARAM.taskName.value; }
     inline const string& getTestName() const { return PARAM.testName.value; }
     inline const string& getMaxTime() const { return PARAM.maxTime.value; }
@@ -94,4 +92,5 @@ public:
     inline const vector<string>& getPrerequisite() const { return prerequisite.value; }
     inline int getRequiredPercentage() const { return requiredPercentage; }
     inline int getAcquirablePoints() const { return acquirablePoints; }
+    inline bool getRecompile() const { return recompile; }
 };

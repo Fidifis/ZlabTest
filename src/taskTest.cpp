@@ -13,3 +13,11 @@ TaskTest::~TaskTest()
 {
     delete result;
 }
+
+void TaskTest::mapIndex(const map<const string, size_t> imap)
+{
+    for (auto &item : prerequisite.value)
+    {
+        prerequisiteIndexes.push_back(imap.at(item));
+    }
+}

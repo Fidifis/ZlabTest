@@ -27,6 +27,8 @@ void difference(const TaskTest *test)
         cout << "Create directory for " << test->getDifferenceData() << endl;
 
     vector<string> diffTests;
+    int total = 0;
+    int successful = 0;
     for (const auto &file : filesystem::directory_iterator(outputData)) {
         if (!file.exists() || file.is_directory())
             continue;
@@ -42,10 +44,13 @@ void difference(const TaskTest *test)
         int exitCode = system(cmd.c_str());
 
         if (exitCode != 0)
-        {
             diffTests.push_back(filename);
-        }
+
+        else
+            ++successful;
+        ++total;
     }
 
     test->result->differingOutput = diffTests;
+    test->result->successPercent = ((float)successful / total) * 100.f;
 }

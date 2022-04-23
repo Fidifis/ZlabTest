@@ -15,6 +15,7 @@ private:
     vector<TaskTest*> tasks;
 
     void saveResult(const vector<TaskTest*> &tasks, const string &path) const;
+    void mapIndexes(const map<const string, size_t> &imap) const;
 
 public:
     TaskManager(const char path[], const char configPath[] = "");

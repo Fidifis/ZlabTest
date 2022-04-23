@@ -57,6 +57,7 @@ TaskManager::TaskManager(const char path[], const char configPath[])
 
     globalTaskConfig = new Task(js, haveConf ? &conf : nullptr);
 
+    map<const string, size_t> imap;
     //make TaskTests
     for (const auto &item : js.items())
     {
@@ -65,9 +66,11 @@ TaskManager::TaskManager(const char path[], const char configPath[])
         {
             const json &testJS = item.value();
             TaskTest *testTask = new TaskTest(globalTaskConfig, item.key(), testJS);
+            imap[testTask->getTestName()] = tasks.size();
             tasks.push_back(testTask);
         }
     }
+    mapIndexes(imap);
 }
 
 TaskManager::~TaskManager()
@@ -79,13 +82,56 @@ TaskManager::~TaskManager()
     }
 }
 
+void TaskManager::mapIndexes(const map<const string, size_t> &imap) const
+{
+    for (auto &item : tasks)
+    {
+        item->mapIndex(imap);
+    }
+}
+
 void TaskManager::run(const char *sourceCodeFile) const
 {
     bool compile = false;
-    for (size_t i = 0; i < tasks.size(); ++i)
+    bool pass = true;
+    int loopProtect = 10;
+    while (pass)
     {
-        compileAndRun(tasks[i], compile, sourceCodeFile);
-        difference(tasks[i]);
+        --loopProtect;
+        if (loopProtect <= 0)
+        {
+            throw runtime_error("loop protect in taskMan");
+        }
+
+        pass = false;
+        for (size_t i = 0; i < tasks.size(); ++i)
+        {
+            if (tasks[i]->result->state != ResultState::not_tested)
+                continue;
+
+            bool doBreak = false;
+            for (const auto &item : tasks[i]->getPrerequisiteIndexes())
+            {
+                if (tasks[item]->result->state != ResultState::passed)
+                {
+                    doBreak = true;
+                    break;
+                }
+            }
+            if (doBreak)
+                continue;
+
+            pass = true;
+
+            compileAndRun(tasks[i], compile, sourceCodeFile);
+            difference(tasks[i]);
+
+            if (tasks[i]->result->successPercent >= tasks[i]->getRequiredPercentage())
+                tasks[i]->result->state = ResultState::passed;
+
+            else
+                tasks[i]->result->state = ResultState::failed;
+        }
     }
 }
 

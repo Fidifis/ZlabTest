@@ -4,6 +4,8 @@ json Result::toJson() const
 {
     json js;
 
+    js["state"] = resultStateToString(state);
+    js["successPercent"] = successPercent;
     js["compileResult"] = compileResultToString(compileResult);
 
     if (unexpectedExitCodes.size() == 0)
