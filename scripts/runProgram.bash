@@ -8,7 +8,7 @@ TIME_FILE="$6";
 
 START="$(date +%s%N)";
 
-( timeout "$TIME" cat "$FILE" | "$BIN" > "$OUTPUT" 2> "$ERRORS" ) 2>> "$ERRORS";
+( timeout "$TIME" "$BIN" < "$FILE" > "$OUTPUT" 2> "$ERRORS" ) 2>> "$ERRORS";
 EXIT="$?";
 
 END="$(date +%s%N)";
