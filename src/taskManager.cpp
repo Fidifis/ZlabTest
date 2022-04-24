@@ -94,7 +94,7 @@ void TaskManager::run(const char *sourceCodeFile) const
 {
     bool compile = false;
     bool pass = true;
-    int loopProtect = 10;
+    int loopProtect = 100;
     while (pass)
     {
         --loopProtect;
