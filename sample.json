@@ -2,28 +2,38 @@
     "taskName": "taskus_maximus",
     "shared": {
         "maxTime": "3",
-        "inputData": "./$(taskName)/$(testName)/input",
-        "compileArgs": "-std=c++17 -Wall -pedantic -O2",
-        "referenceData": "./$(taskName)/$(testName)/reference",
+        "compileArgs": "-std=c++17 -O2",
+        "inputData": "./tasks/$(taskName)/$(testName)/input",
+        "referenceData": "./tasks/$(taskName)/$(testName)/reference",
+        "playground": "./playground/",
         "outputData": "$(playground)/$(taskName)/$(testName)/output/",
-        "playground": "/home/zlabtest/playground/",
         "compiledBinaryFile": "$(playground)/$(taskName)/out.bin",
         "compileErrorsFile": "$(playground)/$(taskName)/compile_errors",
         "outputErrors": "$(playground)/$(taskName)/$(testName)/errors/",
         "outputRunTime": "$(playground)/$(taskName)/$(testName)/time/",
         "differenceData": "$(playground)/$(taskName)/$(testName)/diff/",
         "resultFile": "$(playground)/$(taskName)/result.json",
-        "requiredPercentage": "75",
-        "acquirablePoints": "10"
+        "requiredPercentage": "0",
+        "acquirablePoints": "10",
+        "warningPenaltyPercentage": "0"
     },
     "zakladni_test": {},
+    "compile_test": {
+        "inputData": "./tasks/$(taskName)/zakladni_test/input",
+        "referenceData": "./tasks/$(taskName)/zakladni_test/reference",
+
+        "compileArgs": "-std=c++17 -Wall -pedantic -O0",
+        "warningPenaltyPercentage": "100",
+        "acquirablePoints": "5",
+        "prerequisite": ["zakladni_test"]
+    },
     "memory_test": {
-        "compileArgs": "-std=c++17 -Wall -pedantic -O2 -g -fsanitize=address,leak",
+        "compileArgs": "-std=c++17 -O2 -g -fsanitize=address,leak",
         "prerequisite": ["zakladni_test"]
     },
     "test_rychlosti": {
     	"maxTime": "0.5",
-    	"compileArgs": "-std=c++17 -Wall -pedantic -O0",
+    	"compileArgs": "-std=c++17 -O0",
         "prerequisite": ["zakladni_test", "memory_test"],
         "acquirablePoints": "15"
     }

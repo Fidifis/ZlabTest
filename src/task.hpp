@@ -4,7 +4,7 @@
 #include "stringRef.hpp"
 
 //----------keep this updated---------------
-#define TASK_NUMBER_OF_PARAMETERS 16
+#define TASK_NUMBER_OF_PARAMETERS 17
 #define PARAMETER_TASK_NAME_SYMBOL taskName
 #define PARAMETER_SHARED_SYMBOL shared
 //------------------------------------------
@@ -34,20 +34,21 @@ protected:
             StringRef(PARAMETER_TASK_NAME_SYMBOL, "unnamed", (Flags)ParamType::manualLoad);
             StringRef(testName, "global", (Flags)ParamType::manualLoad);
             StringRef(maxTime, "3", 0);
-            StringRef(compileArgs, "-Wall -pedantic", (Flags)ParamType::specialLoad);
+            StringRef(compileArgs, "-std=c++17 -O2", (Flags)ParamType::specialLoad);
 
-            StringRef(inputData, "./$(taskName)/$(testName)/input/", ParamType::path | ParamType::containVariables);
-            StringRef(referenceData, "./$(taskName)/$(testName)/reference/", ParamType::path | ParamType::containVariables);
+            StringRef(inputData, "./tasks/$(taskName)/$(testName)/input/", ParamType::path | ParamType::containVariables);
+            StringRef(referenceData, "./tasks/$(taskName)/$(testName)/reference/", ParamType::path | ParamType::containVariables);
             StringRef(playground, "./playground/", ParamType::path | ParamType::containVariables);
             StringRef(outputData, "$(playground)/$(taskName)/$(testName)/ouput/", ParamType::path | ParamType::containVariables);
             StringRef(compiledBinaryFile, "$(playground)/$(taskName)/out.bin", (Flags)ParamType::containVariables);
-            StringRef(compileErrorsFile, "$(playground)/$(taskName)/out.err", (Flags)ParamType::containVariables);
-            StringRef(outputErrors, "$(playground)/$(taskName)/$(testName)/errs/", ParamType::path | ParamType::containVariables);
+            StringRef(compileErrorsFile, "$(playground)/$(taskName)/compile_errors", (Flags)ParamType::containVariables);
+            StringRef(outputErrors, "$(playground)/$(taskName)/$(testName)/errors/", ParamType::path | ParamType::containVariables);
             StringRef(outputRunTime, "$(playground)/$(taskName)/$(testName)/time/", ParamType::path | ParamType::containVariables);
             StringRef(differenceData, "$(playground)/$(taskName)/$(testName)/diff/", ParamType::path | ParamType::containVariables);
             StringRef(resultFile, "$(playground)/$(taskName)/result.json", (Flags)ParamType::containVariables);
             StringRef(requiredPercentage, "0", (Flags)ParamType::specialLoad);
             StringRef(acquirablePoints, "10", (Flags)ParamType::specialLoad);
+            StringRef(warningPenaltyPercentage, "0", (Flags)ParamType::specialLoad);
         } paramStruct = ParamStruct();
 
         ParamUnion() { }
@@ -55,7 +56,8 @@ protected:
     } paramHolder;
 
     Reflective(vector<string>, prerequisite, 0);
-    float requiredPercentage = 0;
+    float requiredPercentage = 0.f;
+    float warningPenaltyPercentage = 0.f;
     int acquirablePoints = 10;
     bool recompile = false;
 
@@ -90,7 +92,8 @@ public:
     inline const string& getDifferenceData() const { return PARAM.differenceData.value; }
     inline const string& getResultFile() const { return PARAM.resultFile.value; }
     inline const vector<string>& getPrerequisite() const { return prerequisite.value; }
-    inline int getRequiredPercentage() const { return requiredPercentage; }
+    inline float getRequiredPercentage() const { return requiredPercentage; }
     inline int getAcquirablePoints() const { return acquirablePoints; }
+    inline float getWarningPenaltyPercentage() const { return warningPenaltyPercentage; }
     inline bool getRecompile() const { return recompile; }
 };

@@ -132,7 +132,8 @@ void TaskManager::run(const char *sourceCodeFile) const
             else
                 tasks[i]->result->state = ResultState::failed;
 
-            tasks[i]->result->acquiredPoints = tasks[i]->getAcquirablePoints() * (tasks[i]->result->successPercent / 100.f);
+            float warrningPenalty = tasks[i]->result->compileResult == CompileResult::warrings ? 1.f - (tasks[i]->getWarningPenaltyPercentage() / 100.f) : 1.f;
+            tasks[i]->result->acquiredPoints = tasks[i]->getAcquirablePoints() * (tasks[i]->result->successPercent / 100.f) * warrningPenalty;
         }
     }
 }

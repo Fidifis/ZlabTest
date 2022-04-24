@@ -25,6 +25,7 @@ void Task::copy(const Task *task)
     prerequisite = task->prerequisite;
     acquirablePoints = task->acquirablePoints;
     requiredPercentage = task->requiredPercentage;
+    warningPenaltyPercentage = task->warningPenaltyPercentage;
 }
 
 void Task::loadParameters(const json &js)
@@ -76,6 +77,11 @@ void Task::SpecialLoad(reflective<string> &item, const nlohmann::json &json) {
     {
         item = json[item.key];
         requiredPercentage = stof(item);
+    }
+    else if (item.key == PARAM.warningPenaltyPercentage.key)
+    {
+        item = json[item.key];
+        warningPenaltyPercentage = stof(item);
     }
 }
 
