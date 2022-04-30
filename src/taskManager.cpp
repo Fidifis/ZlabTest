@@ -132,8 +132,7 @@ void TaskManager::run(const char *sourceCodeFile) const
             else
                 tasks[i]->result->state = ResultState::failed;
 
-            float warrningPenalty = tasks[i]->result->compileResult == CompileResult::warrings ? 1.f - (tasks[i]->getWarningPenaltyPercentage() / 100.f) : 1.f;
-            tasks[i]->result->acquiredPoints = tasks[i]->getAcquirablePoints() * (tasks[i]->result->successPercent / 100.f) * warrningPenalty;
+            tasks[i]->result->acquiredPoints = tasks[i]->getAcquirablePoints() * (tasks[i]->result->successPercent / 100.f);
         }
     }
 }
@@ -154,12 +153,20 @@ void TaskManager::saveResult(const vector<TaskTest*> &tasks, const string &path)
     json js;
 
     int totalPoints = 0;
+    bool haveWarnings = false;
     for (const TaskTest *test : tasks)
     {
+        if (test->result->compileResult == CompileResult::warrings)
+            haveWarnings = true;
         js["test results"][test->getTestName()] = test->result->toJson();
         totalPoints += test->result->acquiredPoints;
     }
 
+    if (haveWarnings)
+    {
+        totalPoints -= totalPoints * (tasks[0]->getWarningPenaltyPercentage() / 100.f);
+        js["warning penality applied"] = true;
+    }
     js["total points"] = totalPoints;
 
     stream << setw(4) << js;

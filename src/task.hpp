@@ -48,7 +48,7 @@ protected:
             StringRef(resultFile, "$(playground)/$(taskName)/result.json", (Flags)ParamType::containVariables);
             StringRef(requiredPercentage, "0", (Flags)ParamType::specialLoad);
             StringRef(acquirablePoints, "10", (Flags)ParamType::specialLoad);
-            StringRef(warningPenaltyPercentage, "0", (Flags)ParamType::specialLoad);
+            StringRef(warningPenaltyPercentage, "10", (Flags)ParamType::specialLoad);
         } paramStruct = ParamStruct();
 
         ParamUnion() { }
@@ -57,7 +57,7 @@ protected:
 
     Reflective(vector<string>, prerequisite, 0);
     float requiredPercentage = 0.f;
-    float warningPenaltyPercentage = 0.f;
+    float warningPenaltyPercentage = 10.f;
     int acquirablePoints = 10;
     bool recompile = false;
 
