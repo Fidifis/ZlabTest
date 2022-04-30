@@ -88,7 +88,7 @@ inline static void runThread(const TaskTest *task, tuple<const string, const str
     const string &file = get<1>(data);
     unsigned long long &time = get<2>(data);
     ExitCode &exitCode = get<3>(data);
-    cout << task->getTaskName() << ": " << task->getTestName() << ": " << filename << endl;
+    //cout << task->getTaskName() << ": " << task->getTestName() << ": " << filename << endl;
 
         //( time -f '%E' timeout --time-- cat '--file--' | '--bin--' > '--output--' 2> '--errors--' ) 2> '--timeFile--'
         /*const string cmd = "( time -f '%E' timeout " + task->getMaxTime() +
@@ -168,18 +168,23 @@ inline static unsigned long long runProgram(const TaskTest *task, map<const stri
     }
 
     const int numberOfTasks = files.size();
-    const int numberOfThreads = 4;
+
+    //TODO: přidat možnost pro konfiguraci
+    const int numberOfThreads = 2;
+    const int maxTimeouts = numberOfThreads;
     
     vector<tuple<thread, int>> workers(numberOfThreads);
 
     int activeThreads = 0;
     int i = 0;
+    int timeoutedTests = 0;
     while (true)
     {
-        if (activeThreads < numberOfThreads && i < numberOfTasks)
+        if (activeThreads < numberOfThreads && i < numberOfTasks && timeoutedTests < maxTimeouts)
         {
             workers.push_back(make_tuple(thread(runThread, task, ref(files[i])), i));
-            cout << "deploy thread " << i << endl;
+            //cout << "deploy thread " << i << endl;
+            cout << "Thread " << i << ": " << task->getTaskName() << ": " << task->getTestName() << ": " << get<0>(files[i]) << endl;
             ++activeThreads;
             ++i;
         }
@@ -192,11 +197,14 @@ inline static unsigned long long runProgram(const TaskTest *task, map<const stri
                     get<0>(workers[j]).join();
                     
                     const int index = get<1>(workers[j]);
-                    cout << "thread " << index << " ended" << endl;
+                    cout << "Thread " << index << " ended" << endl;
 
                     if (get<3>(files[index]) > MAX_EXPECTED_CODE)
                     {
                         exitCodes[get<0>(files[index])] = get<3>(files[index]);
+                        
+                        if (get<3>(files[index]) == 124)
+                            ++timeoutedTests;
                     }
                     if (get<2>(files[index]) > maxTime) maxTime = get<2>(files[index]);
 
@@ -205,8 +213,17 @@ inline static unsigned long long runProgram(const TaskTest *task, map<const stri
                     --activeThreads;
                 }
             }
-            if (i >= numberOfTasks && activeThreads == 0)
-                break;
+            if (activeThreads == 0)
+            {
+                if (timeoutedTests >= maxTimeouts)
+                {
+                    cout << "Excecution stops because of " << timeoutedTests << " timeouts" << endl;
+                    task->result->timeouted = true;
+                    break;
+                }
+                else if (i >= numberOfTasks)
+                    break;
+            }
         }
     }
 

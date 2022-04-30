@@ -34,6 +34,7 @@ public:
     float successPercent = 0.f;
     int acquiredPoints = 0;
     unsigned long long maxTime = 0;
+    bool timeouted = false;
 
     CompileResult compileResult = CompileResult::none;
     map<const string, ExitCode> unexpectedExitCodes;

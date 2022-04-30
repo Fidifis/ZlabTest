@@ -9,6 +9,9 @@ json Result::toJson() const
     js["acquiredPoints"] = acquiredPoints;
     js["compileResult"] = compileResultToString(compileResult);
     js["maxTime"] = maxTime;
+    
+    if (timeouted)
+        js["timeouted"] = timeouted;
 
     if (unexpectedExitCodes.size() == 0)
     {
