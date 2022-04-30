@@ -2,9 +2,9 @@ SRC_DIR := src
 OBJ_DIR := obj
 PCH := headers.hpp
 LDFLAGS := 
-CPPFLAGS := -std=c++17 -Wall -Wextra -pedantic -O2
+CPPFLAGS := -std=c++17 -Wall -Wextra -pedantic -pthread -O2
 debug: LDFLAGS := -fsanitize=address,leak
-debug: CPPFLAGS := -std=c++17 -Wall -Wextra -pedantic -Og -g -fsanitize=address,leak
+debug: CPPFLAGS := -std=c++17 -Wall -Wextra -pedantic -pthread -Og -g -fsanitize=address,leak
 
 SRC_FILES := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ_FILES := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRC_FILES))

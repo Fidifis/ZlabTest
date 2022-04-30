@@ -1,11 +1,12 @@
 #pragma once
-#include "headers.hpp"
+#include <string>
+#include <iostream>
 
-#define ANSI_RESET "\033[0m"
-#define ANSI_RED "\033[31m"
-#define ANSI_GREEN "\033[32m"
-#define ANSI_YELLOW "\033[33m"
-#define ANSI_BLUE "\033[34m"
+const char ANSI_RESET[] = "\033[0m";
+const char ANSI_RED[] = "\033[31m";
+const char ANSI_GREEN[] = "\033[32m";
+const char ANSI_YELLOW[] = "\033[33m";
+const char ANSI_BLUE[] = "\033[34m";
 
 enum class Logcol {reset, red, green, yellow, blue};
 

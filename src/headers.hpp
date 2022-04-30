@@ -10,6 +10,8 @@
 #include <array>
 #include <map>
 #include <cstdint>
+#include <tuple>
+#include <thread>
 #include "json.hpp"
 #include "colorfulLog.hpp"
 
