@@ -1,8 +1,8 @@
 SRC_DIR := src
 OBJ_DIR := obj
 PCH := headers.hpp
-LDFLAGS := 
-CPPFLAGS := -std=c++17 -Wall -Wextra -pedantic -O2
+LDFLAGS := -pthread
+CPPFLAGS := -std=c++17 -Wall -Wextra -pedantic -O2 -pthread
 debug: LDFLAGS := -fsanitize=address,leak
 debug: CPPFLAGS := -std=c++17 -Wall -Wextra -pedantic -Og -g -fsanitize=address,leak
 
